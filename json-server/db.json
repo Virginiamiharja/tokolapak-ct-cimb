@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "username": "seto",
+      "email": "setoimut@gmail.com",
+      "password": "password",
+      "role": "Admin",
+      "id": 1
+    },
+    {
+      "username": "virginiamiharja",
+      "email": "virgnm@gmail.com",
+      "password": "password",
+      "rptPassword": "password",
+      "role": "User",
+      "id": 2
+    },
+    {
+      "username": "raymaulidamuhammad",
+      "email": "raymm@gmail.com",
+      "password": "password",
+      "rptPassword": "password",
+      "role": "User",
+      "id": 3
+    },
+    {
+      "username": "simbathecat",
+      "email": "simbathecat@yahoo.com",
+      "password": "password",
+      "rptPassword": "password",
+      "role": "User",
+      "id": 4
+    }
+  ]
+}

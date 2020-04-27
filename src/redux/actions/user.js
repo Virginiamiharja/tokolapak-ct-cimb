@@ -9,19 +9,20 @@ const { ON_LOGIN_SUCCESS, ON_LOGIN_FAIL, ON_LOGOUT_SUCCESS } = userTypes;
 const cookieObject = new Cookie();
 
 export const loginHandler = userLogin => {
-  const { username, password } = userLogin;
+  const { logUsername, logPassword } = userLogin;
   // Sebelum pake dispatch pastiin import applyMiddleware di src/index.js, karena dispatch ini asalnya dari redux-thunk
   return dispatch => {
     Axios.get(`${API_URL}/users`, {
       params: {
-        username,
-        password
+        username: logUsername,
+        password: logPassword
       }
     })
       .then(res => {
+        console.log(res);
         if (res.data.length > 0) {
           swal(
-            `Hi ${res.data[0].fullName}`,
+            `Hi ${res.data[0].username}`,
             "Welcome to your account",
             "success"
           );
@@ -44,7 +45,7 @@ export const loginHandler = userLogin => {
 };
 
 export const registerHandler = userRegister => {
-  const { username, fullName, password, rptPassword, role } = userRegister;
+  const { username, email, password, rptPassword, role } = userRegister;
   return dispatch => {
     Axios.get(`${API_URL}/users`, {
       params: {
@@ -104,6 +105,22 @@ export const keepLoginHandler = cookieResult => {
 export const logoutHandler = () => {
   cookieObject.remove("authData");
   return {
-    type: ON_LOGOUT_SUCESS
+    type: ON_LOGOUT_SUCCESS
+  };
+};
+
+export const optLoginRegister = option => {
+  return dispatch => {
+    if (option == "login") {
+      dispatch({
+        type: "ON_CHANGE_LOGIN",
+        payload: "signin"
+      });
+    } else if (option == "register") {
+      dispatch({
+        type: "ON_CHANGE_REGISTER",
+        payload: "signup"
+      });
+    }
   };
 };

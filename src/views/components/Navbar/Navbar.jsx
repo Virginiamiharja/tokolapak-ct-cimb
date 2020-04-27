@@ -8,6 +8,9 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 import ButtonUI from "../Button/Button.tsx";
 
+import { connect } from "react-redux";
+import { optLoginRegister, logoutHandler } from "../../../redux/actions";
+
 const CircleBg = ({ children }) => {
   return <div className="circle-bg">{children}</div>;
 };
@@ -15,7 +18,7 @@ const CircleBg = ({ children }) => {
 class Navbar extends React.Component {
   state = {
     searchBarIsFocused: false,
-    searcBarInput: "",
+    searcBarInput: ""
   };
 
   onFocus = () => {
@@ -26,7 +29,51 @@ class Navbar extends React.Component {
     this.setState({ searchBarIsFocused: false });
   };
 
+  renderButtonLoginRegister = () => {
+    return (
+      <>
+        <Link to="/auth">
+          <ButtonUI
+            className="mr-3"
+            type="textual"
+            onClick={() => {
+              this.props.optLoginRegister("login");
+            }}
+          >
+            Sign in
+          </ButtonUI>
+        </Link>
+        <Link to="/auth">
+          <ButtonUI
+            type="contained"
+            onClick={() => {
+              this.props.optLoginRegister("register");
+            }}
+          >
+            Sign up
+          </ButtonUI>
+        </Link>
+      </>
+    );
+  };
+
+  renderButtonLogout = () => {
+    return (
+      <>
+        <ButtonUI
+          type="contained"
+          onClick={() => {
+            this.props.logoutHandler();
+          }}
+        >
+          Sign Out
+        </ButtonUI>
+      </>
+    );
+  };
+
   render() {
+    const { isLoggedIn, username } = this.props.user;
     return (
       <div className="d-flex flex-row justify-content-between align-items-center py-4 navbar-container">
         <div className="logo-text">
@@ -56,14 +103,27 @@ class Navbar extends React.Component {
           <CircleBg>
             <small style={{ color: "#3C64B1", fontWeight: "bold" }}>4</small>
           </CircleBg> */}
-          <ButtonUI className="mr-3" type="textual">
-            Sign in
-          </ButtonUI>
-          <ButtonUI type="contained">Sign up</ButtonUI>
+
+          {/* Buat munculin nama user atau tombol */}
+          {isLoggedIn
+            ? // `Hallo ${username}`
+              this.renderButtonLogout()
+            : this.renderButtonLoginRegister()}
         </div>
       </div>
     );
   }
 }
 
-export default Navbar;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+const mapDispatchToProps = {
+  optLoginRegister,
+  logoutHandler
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
