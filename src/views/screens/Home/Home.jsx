@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShippingFast,
   faMoneyBillWave,
-  faHeadset,
+  faHeadset
 } from "@fortawesome/free-solid-svg-icons";
 import "./Home.css";
 
@@ -28,27 +28,27 @@ const dummy = [
     begitu cerdas sehingga dapat merespons dengan sekali sentuh,
     atau bahkan sekali pandang. Dengan iPhone X, visi ini menjadi
     kenyataan. Selamat datang, masa depan.`,
-    id: 1,
+    id: 1
   },
   {
     productName: "iPhone 8",
     image: iPhone8,
     desc: `iPhone 8 memperkenalkan desain kaca yang sepenuhnya baru. Kamera paling populer di dunia, kini lebih baik lagi. Chip yang paling andal dan cerdas di ponsel pintar. Pengisian daya nirkabel yang begitu mudah dilakukan. Dan pengalaman augmented reality yang tak pernah mungkin sebelumnya. iPhone 8. iPhone generasi baru.`,
-    id: 2,
+    id: 2
   },
   {
     productName: "iPad Pro Gen 3",
     image: iPadPro,
     desc: `
     iPad Pro baru telah didesain ulang seutuhnya dan dilengkapi dengan teknologi Apple yang paling canggih. Ini akan membuat Anda berpikir ulang apa yang iPad mampu lakukan`,
-    id: 2,
-  },
+    id: 2
+  }
 ];
 
 class Home extends React.Component {
   state = {
     activeIndex: 0,
-    animating: false,
+    animating: false
   };
 
   renderCarouselItems = () => {
@@ -73,7 +73,7 @@ class Home extends React.Component {
                       borderRadius: "16px",
                       fontWeight: "bolder",
                       position: "absolute",
-                      bottom: 420,
+                      bottom: 420
                     }}
                   >
                     BUY NOW
@@ -146,6 +146,7 @@ class Home extends React.Component {
         <div className="container">
           {/* BEST SELLER SECTION */}
           <h2 className="text-center font-weight-bolder mt-5">BEST SELLER</h2>
+          {/* Yang penting flex-wrap */}
           <div className="row d-flex flex-wrap justify-content-center">
             <ProductCard className="m-2" />
             <ProductCard className="m-2" />
