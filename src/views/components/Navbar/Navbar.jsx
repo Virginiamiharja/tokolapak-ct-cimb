@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import ButtonUI from "../Button/Button.tsx";
 
 import { connect } from "react-redux";
-import { optLoginRegister, logoutHandler } from "../../../redux/actions";
+import { logoutHandler } from "../../../redux/actions";
 
 const CircleBg = ({ children }) => {
   return <div className="circle-bg">{children}</div>;
@@ -29,51 +29,38 @@ class Navbar extends React.Component {
     this.setState({ searchBarIsFocused: false });
   };
 
-  renderButtonLoginRegister = () => {
-    return (
-      <>
-        <Link to="/auth">
-          <ButtonUI
-            className="mr-3"
-            type="textual"
-            onClick={() => {
-              this.props.optLoginRegister("login");
-            }}
-          >
-            Sign in
-          </ButtonUI>
-        </Link>
-        <Link to="/auth">
+  renderButton = () => {
+    if (this.props.user.id) {
+      return (
+        <>
           <ButtonUI
             type="contained"
             onClick={() => {
-              this.props.optLoginRegister("register");
+              this.props.logoutHandler();
             }}
           >
-            Sign up
+            Sign Out
           </ButtonUI>
-        </Link>
-      </>
-    );
-  };
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Link to="/auth">
+            <ButtonUI className="mr-3" type="textual">
+              Sign in
+            </ButtonUI>
+          </Link>
 
-  renderButtonLogout = () => {
-    return (
-      <>
-        <ButtonUI
-          type="contained"
-          onClick={() => {
-            this.props.logoutHandler();
-          }}
-        >
-          Sign Out
-        </ButtonUI>
-      </>
-    );
+          <Link to="/auth">
+            <ButtonUI type="contained">Sign up</ButtonUI>
+          </Link>
+        </>
+      );
+    }
   };
 
   render() {
-    const { isLoggedIn, username } = this.props.user;
     return (
       <div className="d-flex flex-row justify-content-between align-items-center py-4 navbar-container">
         <div className="logo-text">
@@ -103,12 +90,7 @@ class Navbar extends React.Component {
           <CircleBg>
             <small style={{ color: "#3C64B1", fontWeight: "bold" }}>4</small>
           </CircleBg> */}
-
-          {/* Buat munculin nama user atau tombol */}
-          {isLoggedIn
-            ? // `Hallo ${username}`
-              this.renderButtonLogout()
-            : this.renderButtonLoginRegister()}
+          {this.renderButton()}
         </div>
       </div>
     );
@@ -122,7 +104,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  optLoginRegister,
   logoutHandler
 };
 

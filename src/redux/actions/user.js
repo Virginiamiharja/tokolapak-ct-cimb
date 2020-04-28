@@ -9,29 +9,23 @@ const { ON_LOGIN_SUCCESS, ON_LOGIN_FAIL, ON_LOGOUT_SUCCESS } = userTypes;
 const cookieObject = new Cookie();
 
 export const loginHandler = userLogin => {
-  const { logUsername, logPassword } = userLogin;
+  const { username, password } = userLogin;
   // Sebelum pake dispatch pastiin import applyMiddleware di src/index.js, karena dispatch ini asalnya dari redux-thunk
   return dispatch => {
     Axios.get(`${API_URL}/users`, {
       params: {
-        username: logUsername,
-        password: logPassword
+        username,
+        password
       }
     })
       .then(res => {
         console.log(res);
         if (res.data.length > 0) {
-          swal(
-            `Hi ${res.data[0].username}`,
-            "Welcome to your account",
-            "success"
-          );
           dispatch({
             type: ON_LOGIN_SUCCESS,
             payload: res.data[0]
           });
         } else {
-          swal("Oops !", "Wrong username or password", "error");
           dispatch({
             type: ON_LOGIN_FAIL,
             payload: "Wrong username or password"
@@ -45,7 +39,7 @@ export const loginHandler = userLogin => {
 };
 
 export const registerHandler = userRegister => {
-  const { username, email, password, rptPassword, role } = userRegister;
+  const { username, fullName, email, password } = userRegister;
   return dispatch => {
     Axios.get(`${API_URL}/users`, {
       params: {
@@ -60,22 +54,17 @@ export const registerHandler = userRegister => {
           payload: "Username has been registered"
         });
       } else {
-        if (password == rptPassword) {
-          Axios.post(`${API_URL}/users`, userRegister)
-            .then(res => {
-              console.log(res);
-              swal("Congrats", "You already have an account", "success");
-              dispatch({
-                type: ON_LOGIN_SUCCESS,
-                payload: res.data
-              });
-            })
-            .catch(err => {
-              console.log(err);
+        Axios.post(`${API_URL}/users`, userRegister)
+          .then(res => {
+            console.log(res);
+            dispatch({
+              type: ON_LOGIN_SUCCESS,
+              payload: res.data
             });
-        } else {
-          swal("Oops", "Your password doesnt match", "error");
-        }
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     });
   };
@@ -94,6 +83,11 @@ export const keepLoginHandler = cookieResult => {
             type: ON_LOGIN_SUCCESS,
             payload: res.data[0]
           });
+        } else {
+          dispatch({
+            type: ON_LOGIN_FAIL,
+            payload: "Wrong username or password"
+          });
         }
       })
       .catch(err => {
@@ -106,21 +100,5 @@ export const logoutHandler = () => {
   cookieObject.remove("authData");
   return {
     type: ON_LOGOUT_SUCCESS
-  };
-};
-
-export const optLoginRegister = option => {
-  return dispatch => {
-    if (option == "login") {
-      dispatch({
-        type: "ON_CHANGE_LOGIN",
-        payload: "signin"
-      });
-    } else if (option == "register") {
-      dispatch({
-        type: "ON_CHANGE_REGISTER",
-        payload: "signup"
-      });
-    }
   };
 };

@@ -4,32 +4,26 @@
       "username": "seto",
       "email": "setoimut@gmail.com",
       "password": "password",
-      "role": "Admin",
+      "fullName": "Seto Imut",
       "id": 1
     },
     {
       "username": "virginiamiharja",
       "email": "virgnm@gmail.com",
       "password": "password",
-      "rptPassword": "password",
-      "role": "User",
+      "fullName": "Virginia Miharja",
       "id": 2
-    },
+    }
+  ],
+
+  "products": [
     {
-      "username": "raymaulidamuhammad",
-      "email": "raymm@gmail.com",
-      "password": "password",
-      "rptPassword": "password",
-      "role": "User",
-      "id": 3
-    },
-    {
-      "username": "simbathecat",
-      "email": "simbathecat@yahoo.com",
-      "password": "password",
-      "rptPassword": "password",
-      "role": "User",
-      "id": 4
+      "productName": "Kenzo Sweater",
+      "price": 5000000,
+      "category": "Sweater",
+      "desc": "Best sweater",
+      "id": 1,
+      "image": ""
     }
   ]
 }
