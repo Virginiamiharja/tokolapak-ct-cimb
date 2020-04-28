@@ -2,6 +2,7 @@ import React from "react";
 
 import TextField from "../../components/TextField/TextField";
 import ButtonUI from "../../components/Button/Button";
+import "./AuthScreen.css";
 
 import { connect } from "react-redux";
 import { loginHandler, registerHandler } from "../../../redux/actions";
