@@ -128,7 +128,12 @@ class Home extends React.Component {
 
   renderProducts = () => {
     return this.state.bestSellerData.map(val => {
-      return <ProductCard className="m-2" data={val} />;
+      // Keys. Keys help React identify which items have changed, are added, or are removed.
+      // Dan bentuknya harus sebuah string, dan key ini gaperlu ditambahin di props product card
+      // Sebenernya bisa aja dia cuma dikasih ${val.id} cuma kan pasti nanti ada sama dengan list lain yang sama2 memiliki id 1 gitu
+      return (
+        <ProductCard key={`bestseller-${val.id}`} className="m-2" data={val} />
+      );
     });
   };
 

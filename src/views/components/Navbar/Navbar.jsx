@@ -29,36 +29,46 @@ class Navbar extends React.Component {
     this.setState({ searchBarIsFocused: false });
   };
 
-  renderButton = () => {
-    if (this.props.user.id) {
-      return (
-        <>
-          <ButtonUI
-            type="contained"
-            onClick={() => {
-              this.props.logoutHandler();
-            }}
-          >
-            Sign Out
-          </ButtonUI>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Link to="/auth">
-            <ButtonUI className="mr-3" type="textual">
-              Sign in
-            </ButtonUI>
-          </Link>
+  // renderButton = () => {
+  //   if (this.props.user.id) {
+  //     return (
+  //       <>
+  //         {/* <ButtonUI
+  //           type="contained"
+  //           onClick={() => {
+  //             this.props.logoutHandler();
+  //           }}
+  //         >
+  //           Sign Out
+  //         </ButtonUI> */}
+  //         <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
+  //         <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
+  //         <FontAwesomeIcon
+  //           className="mr-2"
+  //           icon={faShoppingCart}
+  //           style={{ fontSize: 24 }}
+  //         />
+  //         <CircleBg>
+  //           <small style={{ color: "#3C64B1", fontWeight: "bold" }}>4</small>
+  //         </CircleBg>
+  //       </>
+  //     );
+  //   } else {
+  //     return (
+  //       <>
+  //         <Link to="/auth" style={{ textDecoration: "none", color: "inherit" }}>
+  //           <ButtonUI className="mr-3" type="textual">
+  //             Sign in
+  //           </ButtonUI>
+  //         </Link>
 
-          <Link to="/auth">
-            <ButtonUI type="contained">Sign up</ButtonUI>
-          </Link>
-        </>
-      );
-    }
-  };
+  //         <Link to="/auth" style={{ textDecoration: "none", color: "inherit" }}>
+  //           <ButtonUI type="contained">Sign up</ButtonUI>
+  //         </Link>
+  //       </>
+  //     );
+  //   }
+  // };
 
   render() {
     return (
@@ -80,17 +90,40 @@ class Navbar extends React.Component {
           />
         </div>
         <div className="d-flex flex-row align-items-center">
-          {/* <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
-          <p className="small ml-3 mr-4">Profile</p>
-          <FontAwesomeIcon
-            className="mr-2"
-            icon={faShoppingCart}
-            style={{ fontSize: 24 }}
-          />
-          <CircleBg>
-            <small style={{ color: "#3C64B1", fontWeight: "bold" }}>4</small>
-          </CircleBg> */}
-          {this.renderButton()}
+          {this.props.user.id ? (
+            <>
+              <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
+              <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
+              <FontAwesomeIcon
+                className="mr-2"
+                icon={faShoppingCart}
+                style={{ fontSize: 24 }}
+              />
+              <CircleBg>
+                <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
+                  4
+                </small>
+              </CircleBg>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ButtonUI className="mr-3" type="textual">
+                  Sign in
+                </ButtonUI>
+              </Link>
+
+              <Link
+                to="/auth"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ButtonUI type="contained">Sign up</ButtonUI>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     );

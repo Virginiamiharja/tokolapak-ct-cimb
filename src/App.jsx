@@ -10,28 +10,43 @@ import AuthScreen from "./views/screens/Auth/AuthScreen";
 import Cookie from "universal-cookie";
 import { connect } from "react-redux";
 import { keepLoginHandler } from "./redux/actions/";
+import ProductDetails from "./views/screens/ProductDetails/ProductDetails";
+import Cart from "./views/screens/Cart/Cart";
 
 const cookieObject = new Cookie();
 
 class App extends React.Component {
   componentDidMount() {
-    let cookieResult = cookieObject.get("authData");
-    if (cookieResult) {
-      this.props.keepLoginHandler(cookieResult);
-    }
+    // Set time out ini gimmick aja untuk tau cara kerja cookie check
+    setTimeout(() => {
+      let cookieResult = cookieObject.get("authData");
+      if (cookieResult) {
+        this.props.keepLoginHandler(cookieResult);
+      }
+    }, 3000);
   }
 
   render() {
-    return (
-      <>
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/auth" component={AuthScreen} />
-        </Switch>
-        <div style={{ height: "120px" }} />
-      </>
-    );
+    if (this.props.user.cookieChecked) {
+      return (
+        <>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/auth" component={AuthScreen} />
+            <Route
+              exact
+              path="/product/:productId"
+              component={ProductDetails}
+            />
+            <Route exact path="/cart" component={Cart} />
+          </Switch>
+          <div style={{ height: "120px" }} />
+        </>
+      );
+    } else {
+      return <div>Loading ...</div>;
+    }
   }
 }
 

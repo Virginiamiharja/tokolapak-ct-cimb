@@ -28,7 +28,7 @@
       "price": 5000000,
       "category": "Phone",
       "image": "https://ibox.co.id/media/wysiwyg/PromoOnline/web-banner---iphone-7-plus-rev.png",
-      "desc": "Best phone",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
       "id": 1
     },
     {
@@ -36,7 +36,7 @@
       "price": 15000000,
       "category": "Tablet",
       "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/p/ipad-pro-11-select-cell-spacegray-201810.png",
-      "desc": "Best tablet",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
       "id": 2
     },
     {
@@ -44,7 +44,7 @@
       "price": 20000000,
       "category": "Laptop",
       "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/m/b/mbp15touch-silver-select-cto-201807_3_1.jpeg",
-      "desc": "Best laptop",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
       "id": 3
     },
     {
@@ -52,16 +52,30 @@
       "price": 2000000,
       "category": "Watch",
       "image": "https://ibox.co.id/media/wysiwyg/Watch/aw5/apple-watch-5_06.png",
-      "desc": "Best watch",
-      "id": 3
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 4
     },
     {
       "productName": "Airpods",
       "price": 3000000,
       "category": "Earphone",
       "image": "https://ibox.co.id/media/wysiwyg/AirPods/airpods_07-min.png",
-      "desc": "Best earphone",
-      "id": 3
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 5
+    }
+  ],
+  "cart": [
+    {
+      "userId": 2,
+      "productId": 2,
+      "qty": 1,
+      "id": 1
+    },
+    {
+      "userId": 2,
+      "productId": 1,
+      "qty": 2,
+      "id": 2
     }
   ]
 }
