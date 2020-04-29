@@ -9,7 +9,7 @@ import Navbar from "./views/components/Navbar/Navbar";
 import AuthScreen from "./views/screens/Auth/AuthScreen";
 import Cookie from "universal-cookie";
 import { connect } from "react-redux";
-import { keepLoginHandler } from "./redux/actions/";
+import { keepLoginHandler, cookieChecker } from "./redux/actions/";
 import ProductDetails from "./views/screens/ProductDetails/ProductDetails";
 import Cart from "./views/screens/Cart/Cart";
 
@@ -22,6 +22,8 @@ class App extends React.Component {
       let cookieResult = cookieObject.get("authData");
       if (cookieResult) {
         this.props.keepLoginHandler(cookieResult);
+      } else {
+        this.props.cookieChecker();
       }
     }, 3000);
   }
@@ -57,7 +59,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  keepLoginHandler
+  keepLoginHandler,
+  cookieChecker
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

@@ -102,3 +102,9 @@ export const logoutHandler = () => {
     type: ON_LOGOUT_SUCCESS
   };
 };
+
+export const cookieChecker = () => {
+  return {
+    type: "COOKIE_CHECK"
+  };
+};

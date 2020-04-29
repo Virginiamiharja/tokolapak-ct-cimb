@@ -29,47 +29,6 @@ class Navbar extends React.Component {
     this.setState({ searchBarIsFocused: false });
   };
 
-  // renderButton = () => {
-  //   if (this.props.user.id) {
-  //     return (
-  //       <>
-  //         {/* <ButtonUI
-  //           type="contained"
-  //           onClick={() => {
-  //             this.props.logoutHandler();
-  //           }}
-  //         >
-  //           Sign Out
-  //         </ButtonUI> */}
-  //         <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
-  //         <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
-  //         <FontAwesomeIcon
-  //           className="mr-2"
-  //           icon={faShoppingCart}
-  //           style={{ fontSize: 24 }}
-  //         />
-  //         <CircleBg>
-  //           <small style={{ color: "#3C64B1", fontWeight: "bold" }}>4</small>
-  //         </CircleBg>
-  //       </>
-  //     );
-  //   } else {
-  //     return (
-  //       <>
-  //         <Link to="/auth" style={{ textDecoration: "none", color: "inherit" }}>
-  //           <ButtonUI className="mr-3" type="textual">
-  //             Sign in
-  //           </ButtonUI>
-  //         </Link>
-
-  //         <Link to="/auth" style={{ textDecoration: "none", color: "inherit" }}>
-  //           <ButtonUI type="contained">Sign up</ButtonUI>
-  //         </Link>
-  //       </>
-  //     );
-  //   }
-  // };
-
   render() {
     return (
       <div className="d-flex flex-row justify-content-between align-items-center py-4 navbar-container">
@@ -94,16 +53,22 @@ class Navbar extends React.Component {
             <>
               <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
               <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
-              <FontAwesomeIcon
-                className="mr-2"
-                icon={faShoppingCart}
-                style={{ fontSize: 24 }}
-              />
-              <CircleBg>
-                <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
-                  4
-                </small>
-              </CircleBg>
+              <Link
+                to="/cart"
+                className="d-flex"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <FontAwesomeIcon
+                  className="mr-2"
+                  icon={faShoppingCart}
+                  style={{ fontSize: 24 }}
+                />
+                <CircleBg>
+                  <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
+                    4
+                  </small>
+                </CircleBg>
+              </Link>
             </>
           ) : (
             <>
