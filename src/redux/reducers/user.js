@@ -12,7 +12,8 @@ const init_state = {
   role: "",
   errMsg: "",
   // Cart dan app.jsx sama2 menggunakan component did mount, jadi ketika kita buka cart dia userId 0 karena blm ke set sama component did mount di app.jsx
-  cookieChecked: false
+  cookieChecked: false,
+  searchInput: ""
 };
 
 export default (state = init_state, action) => {
@@ -36,6 +37,8 @@ export default (state = init_state, action) => {
       return { ...state, errMsg: action.payload, cookieChecked: true };
     case "COOKIE_CHECK":
       return { ...state, cookieChecked: true };
+    case "SEARCH_PRODUCT":
+      return { ...state, cookieChecked: true, searchInput: action.payload };
     default:
       return { ...state };
   }

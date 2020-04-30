@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import ButtonUI from "../Button/Button.tsx";
 
 import { connect } from "react-redux";
-import { logoutHandler } from "../../../redux/actions";
+import { logoutHandler, searchProduct } from "../../../redux/actions";
 
 const CircleBg = ({ children }) => {
   return <div className="circle-bg">{children}</div>;
@@ -46,12 +46,19 @@ class Navbar extends React.Component {
             }`}
             type="text"
             placeholder="Cari produk impianmu disini"
+            onChange={e => {
+              this.props.searchProduct(e.target.value);
+            }}
           />
         </div>
         <div className="d-flex flex-row align-items-center">
           {this.props.user.id ? (
             <>
-              <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
+              <FontAwesomeIcon
+                onClick={this.props.logoutHandler}
+                icon={faUser}
+                style={{ fontSize: 24 }}
+              />
               <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
               <Link
                 to="/cart"
@@ -102,7 +109,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  logoutHandler
+  logoutHandler,
+  searchProduct
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -114,7 +114,7 @@ class AdminDashboard extends React.Component {
 
   editProductHandler = () => {
     // PUT VS PATCH
-    //   Kalo put itu misalnya kita ganti nama doang nih, nanti dia bakal kehapus trs adanya nama doang di db.json
+    //   Kalo put itu misalnya kita ganti nama doang nih, nanti dia bakal kehapus trs adanya nama doang di db.json kasarnya kaya ngereplace sama apa yang diudate
     //   Jdi harus di spread dulu gitu, kalo patch dia bakal cari oh nama keganti tapi semua kaya category price gabakal hilang
     Axios.put(
       `${API_URL}/products/${this.state.editProductForm.id}`,
@@ -199,9 +199,8 @@ class AdminDashboard extends React.Component {
                   <option value=""> All .. </option>
                   <option value="Phone"> Phone </option>
                   <option value="Laptop"> Laptop </option>
-                  <option value="Table"> Tablet </option>
-                  <option value="Watch">Watch </option>
-                  <option value="Earphone"> Earphone </option>
+                  <option value="Table"> Tab </option>
+                  <option value="Watch"> Desktop </option>
                 </select>
               </td>
               <td>
@@ -261,9 +260,8 @@ class AdminDashboard extends React.Component {
                   <option value=""> All .. </option>
                   <option value="Phone"> Phone </option>
                   <option value="Laptop"> Laptop </option>
-                  <option value="Table"> Tablet </option>
-                  <option value="Watch">Watch </option>
-                  <option value="Earphone"> Earphone </option>
+                  <option value="Table"> Tab </option>
+                  <option value="Watch"> Desktop </option>
                 </select>
               </td>
               <td>

@@ -19,6 +19,7 @@ import ButtonUI from "../../components/Button/Button";
 import CarouselShowcaseItem from "./CarouselShowcaseItem.tsx";
 import Colors from "../../../constants/Colors";
 import { API_URL } from "../../../constants/API";
+import { connect } from "react-redux";
 
 const dummy = [
   {
@@ -111,10 +112,14 @@ class Home extends React.Component {
     this.setState({ activeIndex: prevIndex });
   };
 
-  getBestSellerData = () => {
-    Axios.get(`${API_URL}/products`)
+  getBestSellerData = (currCategory = null) => {
+    Axios.get(`${API_URL}/products`, {
+      params: {
+        category: currCategory
+      }
+    })
       .then(res => {
-        console.log(res);
+        console.log(res.data.productName);
         this.setState({ bestSellerData: res.data });
       })
       .catch(err => {
@@ -128,31 +133,74 @@ class Home extends React.Component {
 
   renderProducts = () => {
     return this.state.bestSellerData.map(val => {
-      // Keys. Keys help React identify which items have changed, are added, or are removed.
-      // Dan bentuknya harus sebuah string, dan key ini gaperlu ditambahin di props product card
-      // Sebenernya bisa aja dia cuma dikasih ${val.id} cuma kan pasti nanti ada sama dengan list lain yang sama2 memiliki id 1 gitu
-      return (
-        <ProductCard key={`bestseller-${val.id}`} className="m-2" data={val} />
-      );
+      // Disini si state searchInput global dan dia ketrigger ketika di navbar ada event onChange, jadi disini dia juga ke trigger
+      if (
+        val.productName
+          .toLowerCase()
+          .startsWith(this.props.user.searchInput.toLowerCase())
+      ) {
+        return (
+          <ProductCard
+            key={`bestseller-${val.id}`}
+            className="m-2"
+            data={val}
+          />
+        );
+      }
     });
+  };
+
+  changeProductCategory = productCategory => {
+    // Ini biar dia real time gitu, makanya langsung dibuat parameter di getBestSellerData
+    // Karena td udh coba pake state, state itu lambat
+    this.getBestSellerData(productCategory);
   };
 
   render() {
     return (
       <div>
         <div className="d-flex justify-content-center flex-row align-items-center my-3">
-          <Link to="/" style={{ color: "inherit" }}>
-            <h6 className="mx-4 font-weight-bold">PHONE</h6>
+          <Link to="" style={{ color: "inherit" }}>
+            <h6
+              className="mx-4 font-weight-bold"
+              onClick={() => {
+                this.changeProductCategory("Phone");
+              }}
+            >
+              PHONE
+            </h6>
           </Link>
-          <Link to="/" style={{ color: "inherit" }}>
-            <h6 className="mx-4 font-weight-bold">LAPTOP</h6>
+          <Link to="" style={{ color: "inherit" }}>
+            <h6
+              className="mx-4 font-weight-bold"
+              onClick={() => {
+                this.changeProductCategory("Laptop");
+              }}
+            >
+              LAPTOP
+            </h6>
           </Link>
-          <Link to="/" style={{ color: "inherit" }}>
-            <h6 className="mx-4 font-weight-bold">TAB</h6>
+          <Link to="" style={{ color: "inherit" }}>
+            <h6
+              className="mx-4 font-weight-bold"
+              onClick={() => {
+                this.changeProductCategory("Tab");
+              }}
+            >
+              TAB
+            </h6>
           </Link>
-          <Link to="/" style={{ color: "inherit" }}>
-            <h6 className="mx-4 font-weight-bold">DESKTOP</h6>
+          <Link to="" style={{ color: "inherit" }}>
+            <h6
+              className="mx-4 font-weight-bold"
+              onClick={() => {
+                this.changeProductCategory("Desktop");
+              }}
+            >
+              DESKTOP
+            </h6>
           </Link>
+          <h5> {this.props.user.searchInput} </h5>
         </div>
         <Carousel
           className="carousel-item-home-bg "
@@ -234,4 +282,9 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+export default connect(mapStateToProps)(Home);

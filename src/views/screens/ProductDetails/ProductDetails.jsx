@@ -30,14 +30,15 @@ class ProductDetails extends React.Component {
   }
 
   addToCartHandler = () => {
-    // Kita cek di cart ada ID yang sama ga
+    // Kita cek di cart ada id product di user id yang sama ga
     Axios.get(`${API_URL}/carts`, {
       params: {
+        userId: this.props.user.id,
         productId: this.state.product.id
       }
     })
       .then(res => {
-        // Apabila ada data yang sama
+        // Apabila tidak ada data yang sama
         if (res.data.length > 0) {
           // Qty nya aja yang di edit jadi nambah 1
           Axios.patch(`${API_URL}/carts/${res.data[0].id}`, {
@@ -55,6 +56,7 @@ class ProductDetails extends React.Component {
               console.log(err);
             });
         } else {
+          console.log(this.props.user.id);
           // Kalo tidak ada data yang sama, di post ke carts
           Axios.post(`${API_URL}/carts`, {
             userId: this.props.user.id,

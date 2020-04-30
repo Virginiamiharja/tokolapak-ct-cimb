@@ -109,3 +109,10 @@ export const cookieChecker = () => {
     type: "COOKIE_CHECK"
   };
 };
+
+export const searchProduct = searchInput => {
+  return {
+    type: "SEARCH_PRODUCT",
+    payload: searchInput
+  };
+};

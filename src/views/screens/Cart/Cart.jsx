@@ -8,11 +8,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import swal from "sweetalert";
 import { Table, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
+import ButtonUI from "../../components/Button/Button";
+import TextField from "../../components/TextField/TextField";
 
 class Cart extends React.Component {
   state = {
     delete: false,
-    productCart: []
+    productCart: [],
+    showProductDetails: false,
+    transactionDetails: {
+      userId: 0,
+      totalPrice: 0,
+      paymentStatus: "pending",
+      products: []
+    }
   };
 
   getProductCart = () => {
@@ -53,6 +62,12 @@ class Cart extends React.Component {
               <img style={{ height: "100px" }} src={product.image} alt="" />
             </td>
             <td>
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+              }).format(product.price * qty)}
+            </td>
+            <td>
               <FontAwesomeIcon
                 icon={faTrashAlt}
                 style={{ fontSize: 20 }}
@@ -89,6 +104,102 @@ class Cart extends React.Component {
       });
   };
 
+  showTransactionDetails = () => {
+    // Untuk nampung sementara semua product di 1 user ID
+    let tempProduct = [];
+    let totalPrice = 0;
+
+    this.state.productCart.map(value => {
+      tempProduct.push(value.product);
+      totalPrice += value.product.price * value.qty;
+    });
+
+    this.setState({
+      showProductDetails: true,
+      transactionDetails: {
+        ...this.state.transactionDetails,
+        userId: this.props.user.id,
+        totalPrice,
+        // paymentStatus
+        products: tempProduct
+      }
+    });
+  };
+
+  renderTransactionDetails = () => {
+    return (
+      <div>
+        <h3 className="mb-3"> Transaction Details </h3>
+        <p className="col-3">
+          Full Name <TextField value={this.props.user.fullName} />
+          <br />
+          Address
+          <TextField
+            value={this.state.transactionDetails.userId + " ini isinya user ID"}
+          />
+          <br />
+          Total Price
+          <TextField
+            className="mb-3"
+            value={new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR"
+            }).format(this.state.transactionDetails.totalPrice)}
+          />
+          <h6> Product List </h6>
+          <Table>
+            <thead>
+              <tr>
+                <td> Product ID </td>
+                <td> Product Name </td>
+                <td> Product Category </td>
+                <td> Product Price </td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.transactionDetails.products.map(value => {
+                return (
+                  <tr>
+                    <td>{value.id}</td>
+                    <td>{value.productName}</td>
+                    <td>{value.category}</td>
+                    <td>
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR"
+                      }).format(value.price)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tr>
+              <td colSpan={3}></td>
+              <td colSpan={1}>
+                <ButtonUI onClick={this.confirmPayment}> Confirm </ButtonUI>
+              </td>
+            </tr>
+          </Table>
+        </p>
+      </div>
+    );
+  };
+
+  confirmPayment = () => {
+    Axios.post(`${API_URL}/transactions`, this.state.transactionDetails)
+      .then(res => {
+        swal("Thank you", "For shopping with us", "success");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    // Untuk kosongin cart
+    this.state.productCart.map(value => {
+      return this.deleteProductCart(value.id);
+    });
+  };
+
   render() {
     if (this.state.productCart.length == 0) {
       return (
@@ -107,11 +218,26 @@ class Cart extends React.Component {
               <td> Quantity </td>
               <td> Price </td>
               <td> Image </td>
+              <td> Total Price </td>
               <td> Action </td>
             </tr>
           </thead>
           <tbody>{this.renderProductCart()}</tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={5}></td>
+              <td colSpan={1}>
+                <ButtonUI
+                  type="contained"
+                  onClick={this.showTransactionDetails}
+                >
+                  Check Out
+                </ButtonUI>
+              </td>
+            </tr>
+          </tfoot>
         </Table>
+        {this.state.showProductDetails ? this.renderTransactionDetails() : null}
       </div>
     );
   }
