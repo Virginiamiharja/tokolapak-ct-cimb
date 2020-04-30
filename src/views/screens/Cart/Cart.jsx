@@ -6,27 +6,13 @@ import { API_URL } from "../../../constants/API";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import swal from "sweetalert";
+import { Table, Alert } from "reactstrap";
+import { Link } from "react-router-dom";
 
 class Cart extends React.Component {
   state = {
     delete: false,
-    productCart: [
-      {
-        hallo: "",
-        id: 0,
-        product: {
-          productName: "",
-          price: 0,
-          category: "",
-          image: "",
-          desc: "",
-          id: 0
-        },
-        productId: 0,
-        qty: 0,
-        userId: 0
-      }
-    ]
+    productCart: []
   };
 
   getProductCart = () => {
@@ -50,30 +36,27 @@ class Cart extends React.Component {
 
   renderProductCart = () => {
     return this.state.productCart.map((value, index) => {
+      const { id, qty, product } = value;
       return (
         <>
           <tr>
-            <td>{index + 1}</td>
-            <td> {value.product.productName} </td>
-            <td> {value.qty} </td>
+            <td> {index + 1} </td>
+            <td> {product.productName} </td>
+            <td> {qty} </td>
             <td>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR"
-              }).format(value.product.price)}
+              }).format(product.price)}
             </td>
             <td>
-              <img
-                style={{ height: "100px" }}
-                src={value.product.image}
-                alt=""
-              />
+              <img style={{ height: "100px" }} src={product.image} alt="" />
             </td>
             <td>
               <FontAwesomeIcon
                 icon={faTrashAlt}
                 style={{ fontSize: 20 }}
-                onClick={() => this.deleteProductCart(value.id, index)}
+                onClick={() => this.deleteProductCart(id, index)}
               />
             </td>
           </tr>
@@ -107,9 +90,16 @@ class Cart extends React.Component {
   };
 
   render() {
+    if (this.state.productCart.length == 0) {
+      return (
+        <Alert className="m-5">
+          Your cart is empty, go <Link to="/">shopping</Link> !
+        </Alert>
+      );
+    }
     return (
       <div className="m-5">
-        <table className="table table-bordered text-center">
+        <Table className="text-center">
           <thead>
             <tr>
               <td> No {this.state.hallo} </td>
@@ -121,7 +111,7 @@ class Cart extends React.Component {
             </tr>
           </thead>
           <tbody>{this.renderProductCart()}</tbody>
-        </table>
+        </Table>
       </div>
     );
   }

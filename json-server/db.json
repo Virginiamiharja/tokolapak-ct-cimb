@@ -5,21 +5,32 @@
       "email": "setoimut@gmail.com",
       "password": "password",
       "fullName": "Seto Imut",
-      "id": 1
+      "id": 1,
+      "role": "user"
     },
     {
       "username": "virginiamiharja",
       "email": "virgnm@gmail.com",
       "password": "password",
       "fullName": "Virginia Miharja",
-      "id": 2
+      "id": 2,
+      "role": "user"
     },
     {
       "username": "pompom",
       "fullName": "Pom Pom the Cat",
       "email": "pompom@hotmail.com",
       "password": "password",
-      "id": 3
+      "id": 3,
+      "role": "user"
+    },
+    {
+      "username": "admin",
+      "fullName": "Super Admin",
+      "email": "admin@mail.com",
+      "password": "password",
+      "id": 4,
+      "role": "admin"
     }
   ],
   "products": [
@@ -62,14 +73,72 @@
       "image": "https://ibox.co.id/media/wysiwyg/AirPods/airpods_07-min.png",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
       "id": 5
+    },
+    {
+      "productName": "iMac ",
+      "price": "34000000",
+      "category": "Laptop",
+      "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 6
+    },
+    {
+      "productName": "iPhone 11 Pro Max",
+      "price": "20000000",
+      "category": "Phone",
+      "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-11-pro-max-midnight-green_3.png",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 7
+    },
+    {
+      "productName": "Airpods Pro",
+      "price": "4000000",
+      "category": "Earphone",
+      "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/m/w/mwp22_av2.jpeg",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 8
+    },
+    {
+      "productName": "Xiaomi Redmi 6A",
+      "price": "5000000",
+      "category": "Phone",
+      "image": "https://d2pa5gi5n2e1an.cloudfront.net/global/images/product/mobilephones/Xiaomi_Redmi_6A/Xiaomi_Redmi_6A_L_1.jpg",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 9
+    },
+    {
+      "productName": "Samsung Galaxy Flip Z",
+      "price": "11000000",
+      "category": "Phone",
+      "image": "https://mmc.tirto.id/image/2020/02/12/samsung-galaxy-z_ratio-16x9.jpg",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "id": 10
     }
   ],
-  "carts": [
+  "carts": [],
+  "transactions": [
     {
       "userId": 2,
-      "productId": 5,
-      "qty": 2,
-      "id": 2
+      "totalPrice": 200000000000,
+      "status": "pending",
+      "items": [
+        {
+          "productName": "Samsung Galaxy Flip Z",
+          "price": "11000000",
+          "category": "Phone",
+          "image": "https://mmc.tirto.id/image/2020/02/12/samsung-galaxy-z_ratio-16x9.jpg",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 10
+        }
+      ],
+      "id": 1
+    },
+    {
+      "userId": 2,
+      "totalPrice": 2000000000,
+      "status": "pending",
+      "items": [],
+      "id": 1
     }
   ]
 }

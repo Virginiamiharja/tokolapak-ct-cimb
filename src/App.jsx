@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { keepLoginHandler, cookieChecker } from "./redux/actions/";
 import ProductDetails from "./views/screens/ProductDetails/ProductDetails";
 import Cart from "./views/screens/Cart/Cart";
+import AdminDashboard from "./views/screens/Admin/AdminDashboard";
 
 const cookieObject = new Cookie();
 
@@ -28,6 +29,12 @@ class App extends React.Component {
     }, 3000);
   }
 
+  renderAdminRoutes = () => {
+    if (this.props.user.role == "admin") {
+      return <Route exact path="/admin/dashboard" component={AdminDashboard} />;
+    }
+  };
+
   render() {
     if (this.props.user.cookieChecked) {
       return (
@@ -42,7 +49,9 @@ class App extends React.Component {
               component={ProductDetails}
             />
             <Route exact path="/cart" component={Cart} />
+            {this.renderAdminRoutes()}
           </Switch>
+
           <div style={{ height: "120px" }} />
         </>
       );

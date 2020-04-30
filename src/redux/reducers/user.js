@@ -6,8 +6,9 @@ const init_state = {
   id: 0,
   username: "",
   fullName: "",
-  // email: "",
-  address: {},
+  email: "",
+  role: "",
+  // address: {},
   role: "",
   errMsg: "",
   // Cart dan app.jsx sama2 menggunakan component did mount, jadi ketika kita buka cart dia userId 0 karena blm ke set sama component did mount di app.jsx
@@ -17,11 +18,12 @@ const init_state = {
 export default (state = init_state, action) => {
   switch (action.type) {
     case ON_LOGIN_SUCCESS:
-      const { id, username, fullName, role } = action.payload;
+      const { id, username, email, fullName, role } = action.payload;
       return {
         ...state,
         id,
         username,
+        email,
         fullName,
         role,
         cookieChecked: true

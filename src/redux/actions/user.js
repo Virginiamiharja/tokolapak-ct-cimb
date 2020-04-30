@@ -54,7 +54,8 @@ export const registerHandler = userRegister => {
           payload: "Username has been registered"
         });
       } else {
-        Axios.post(`${API_URL}/users`, userRegister)
+        // Ini buat nembak juga sama bisa ditaro di local state register
+        Axios.post(`${API_URL}/users`, { ...userRegister, role: "user" })
           .then(res => {
             console.log(res);
             dispatch({
