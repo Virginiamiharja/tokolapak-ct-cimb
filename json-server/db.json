@@ -115,30 +115,24 @@
       "id": 10
     }
   ],
-  "carts": [],
-  "transactions": [
+  "carts": [
     {
       "userId": 2,
-      "totalPrice": 200000000000,
-      "status": "pending",
-      "items": [
-        {
-          "productName": "Samsung Galaxy Flip Z",
-          "price": "11000000",
-          "category": "Phone",
-          "image": "https://mmc.tirto.id/image/2020/02/12/samsung-galaxy-z_ratio-16x9.jpg",
-          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
-          "id": 10
-        }
-      ],
+      "productId": 1,
+      "qty": 3,
       "id": 1
     },
     {
       "userId": 2,
-      "totalPrice": 2000000000,
-      "status": "pending",
-      "items": [],
-      "id": 1
+      "productId": 2,
+      "qty": 2,
+      "id": 2
+    },
+    {
+      "userId": 2,
+      "productId": 3,
+      "qty": 1,
+      "id": 3
     }
   ]
 }

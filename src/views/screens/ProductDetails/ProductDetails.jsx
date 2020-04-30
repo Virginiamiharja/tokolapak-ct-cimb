@@ -18,22 +18,6 @@ class ProductDetails extends React.Component {
     }
   };
 
-  addToCartHandler = () => {
-    Axios.post(`${API_URL}/carts`, {
-      userId: this.props.user.id,
-      // Bisa dari state productId bisa juga dari query params
-      productId: this.state.product.id,
-      qty: 2
-    })
-      .then(res => {
-        console.log(res);
-        swal("Add to cart", "Your item has been added to your cart", "success");
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   componentDidMount() {
     Axios.get(`${API_URL}/products/${this.props.match.params.productId}`)
       .then(res => {
@@ -44,6 +28,55 @@ class ProductDetails extends React.Component {
         console.log(err);
       });
   }
+
+  addToCartHandler = () => {
+    // Kita cek di cart ada ID yang sama ga
+    Axios.get(`${API_URL}/carts`, {
+      params: {
+        productId: this.state.product.id
+      }
+    })
+      .then(res => {
+        // Apabila ada data yang sama
+        if (res.data.length > 0) {
+          // Qty nya aja yang di edit jadi nambah 1
+          Axios.patch(`${API_URL}/carts/${res.data[0].id}`, {
+            qty: res.data[0].qty + 1
+          })
+            .then(res => {
+              console.log(res);
+              swal(
+                "Add to cart",
+                "Your item has been added to your cart",
+                "success"
+              );
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          // Kalo tidak ada data yang sama, di post ke carts
+          Axios.post(`${API_URL}/carts`, {
+            userId: this.props.user.id,
+            // Bisa dari state productId bisa juga dari query params
+            productId: this.state.product.id,
+            qty: 1
+          })
+            .then(res => {
+              console.log(res);
+              swal(
+                "Add to cart",
+                "Your item has been added to your cart",
+                "success"
+              );
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      })
+      .catch(err => console.log(err));
+  };
 
   render() {
     const {
