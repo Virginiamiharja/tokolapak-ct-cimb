@@ -109,7 +109,7 @@ class Cart extends React.Component {
     let totalPrice = 0;
 
     this.state.productCart.map(value => {
-      tempProduct.push(value.product);
+      tempProduct.push({ ...value.product, qty: value.qty });
       totalPrice += value.product.price * value.qty;
     });
 
