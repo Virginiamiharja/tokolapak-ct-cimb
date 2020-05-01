@@ -2,7 +2,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Final Project Description
 
-...
+HATUK adalah portal bagi orangtua dengan anak berkebutuhan khusus dimana didalam portal tersebut, terdapat beberapa fitur yang dapat menunjang kebutuhan informasi bagi para orang tua.
+#1 Daftar sekolah khusus ABK disekitar Jakarta
+#2 Daftar tempat terapi untuk ABK disekitar Jakarta
+#3 Artikel mengenai ABK
+#4 Fitur booking terapis untuk datang kerumah
 
 ## Available Scripts
 
