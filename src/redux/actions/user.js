@@ -48,7 +48,6 @@ export const registerHandler = userRegister => {
     }).then(res => {
       console.log(res);
       if (res.data.length > 0) {
-        swal("Oops", "That username has been registered", "error");
         dispatch({
           type: "ON_REGISTER_FAIL",
           payload: "Username has been registered"
@@ -98,15 +97,9 @@ export const keepLoginHandler = cookieResult => {
 };
 
 export const logoutHandler = () => {
-  cookieObject.remove("authData");
+  cookieObject.remove("authData", { path: "/" });
   return {
     type: ON_LOGOUT_SUCCESS
-  };
-};
-
-export const cookieChecker = () => {
-  return {
-    type: "COOKIE_CHECK"
   };
 };
 
@@ -114,5 +107,11 @@ export const searchProduct = searchInput => {
   return {
     type: "SEARCH_PRODUCT",
     payload: searchInput
+  };
+};
+
+export const cookieChecker = () => {
+  return {
+    type: "COOKIE_CHECK"
   };
 };

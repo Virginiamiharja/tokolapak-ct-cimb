@@ -44,7 +44,7 @@ const dummy = [
     image: iPadPro,
     desc: `
     iPad Pro baru telah didesain ulang seutuhnya dan dilengkapi dengan teknologi Apple yang paling canggih. Ini akan membuat Anda berpikir ulang apa yang iPad mampu lakukan`,
-    id: 2
+    id: 3
   }
 ];
 
@@ -140,11 +140,16 @@ class Home extends React.Component {
           .startsWith(this.props.user.searchInput.toLowerCase())
       ) {
         return (
-          <ProductCard
-            key={`bestseller-${val.id}`}
-            className="m-2"
-            data={val}
-          />
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to={`/product/${val.id}`}
+          >
+            <ProductCard
+              key={`bestseller-${val.id}`}
+              className="m-2"
+              data={val}
+            />
+          </Link>
         );
       }
     });
@@ -160,6 +165,16 @@ class Home extends React.Component {
     return (
       <div>
         <div className="d-flex justify-content-center flex-row align-items-center my-3">
+          <Link to="" style={{ color: "inherit" }}>
+            <h6
+              className="mx-4 font-weight-bold"
+              onClick={() => {
+                this.changeProductCategory();
+              }}
+            >
+              ALL
+            </h6>
+          </Link>
           <Link to="" style={{ color: "inherit" }}>
             <h6
               className="mx-4 font-weight-bold"

@@ -31,6 +31,14 @@
       "password": "password",
       "id": 4,
       "role": "admin"
+    },
+    {
+      "username": "nuggetthequeen",
+      "fullName": "Queen Nugget",
+      "email": "nugget@mail.com",
+      "password": "password",
+      "role": "user",
+      "id": 5
     }
   ],
   "products": [
@@ -75,22 +83,103 @@
       "id": 5
     },
     {
-      "productName": "Xiaomi Redmi 6A",
-      "price": "5000000",
+      "productName": "Samsung Galaxy Flip Z",
+      "price": "23000000",
       "category": "Phone",
-      "image": "https://d2pa5gi5n2e1an.cloudfront.net/global/images/product/mobilephones/Xiaomi_Redmi_6A/Xiaomi_Redmi_6A_L_1.jpg",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "image": "https://images.samsung.com/id/smartphones/galaxy-z-flip/images/galaxy-z-flip-share-image.jpg",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut faucibus urna ac lacus commodo, sit amet ullamcorper libero tempor. Curabitur lacinia lectus ut metus malesuada, sed posuere libero posuere. Donec sollicitudin sit amet tortor sit amet consectetur.",
       "id": 6
     },
     {
-      "productName": "Samsung Galaxy Flip Z",
-      "price": "11000000",
-      "category": "Phone",
-      "image": "https://mmc.tirto.id/image/2020/02/12/samsung-galaxy-z_ratio-16x9.jpg",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+      "productName": "Asus ROG G531GD",
+      "price": "25000000",
+      "category": "Laptop",
+      "image": "https://www.pemmz.com/media/catalog/product/cache/5/thumbnail/1000x1000/040ec09b1e35df139433887a97daa66f/s/t/st3_2_2.jpg",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut faucibus urna ac lacus commodo, sit amet ullamcorper libero tempor. Curabitur lacinia lectus ut metus malesuada, sed posuere libero posuere. Donec sollicitudin sit amet tortor sit amet consectetur.",
       "id": 7
     }
   ],
   "carts": [],
-  "transactions": []
+  "transactions": [
+    {
+      "userId": 2,
+      "totalPrice": 5000000,
+      "paymentStatus": "pending",
+      "products": [
+        {
+          "productName": "iPhone 7 Plus",
+          "price": 5000000,
+          "category": "Phone",
+          "image": "https://ibox.co.id/media/wysiwyg/PromoOnline/web-banner---iphone-7-plus-rev.png",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 1
+        }
+      ],
+      "id": 1
+    },
+    {
+      "userId": 3,
+      "totalPrice": 84000000,
+      "paymentStatus": "pending",
+      "products": [
+        {
+          "productName": "iPad Pro 3",
+          "price": 15000000,
+          "category": "Tab",
+          "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/p/ipad-pro-11-select-cell-spacegray-201810.png",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 2
+        },
+        {
+          "productName": "Macbook Pro",
+          "price": 20000000,
+          "category": "Laptop",
+          "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/m/b/mbp15touch-silver-select-cto-201807_3_1.jpeg",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 3
+        },
+        {
+          "productName": "iMac ",
+          "price": "34000000",
+          "category": "Desktop",
+          "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 4
+        }
+      ],
+      "id": 2
+    },
+    {
+      "userId": 2,
+      "totalPrice": 138000000,
+      "paymentStatus": "pending",
+      "products": [
+        {
+          "productName": "Asus ROG G531GD",
+          "price": "25000000",
+          "category": "Laptop",
+          "image": "https://www.pemmz.com/media/catalog/product/cache/5/thumbnail/1000x1000/040ec09b1e35df139433887a97daa66f/s/t/st3_2_2.jpg",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut faucibus urna ac lacus commodo, sit amet ullamcorper libero tempor. Curabitur lacinia lectus ut metus malesuada, sed posuere libero posuere. Donec sollicitudin sit amet tortor sit amet consectetur.",
+          "id": 7
+        },
+        {
+          "productName": "iPhone 11 Pro Max",
+          "price": "20000000",
+          "category": "Phone",
+          "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-11-pro-max-midnight-green_3.png",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 5
+        },
+        {
+          "productName": "iMac ",
+          "price": "34000000",
+          "category": "Desktop",
+          "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
+          "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
+          "id": 4
+        }
+      ],
+      "id": 3
+    }
+  ]
 }

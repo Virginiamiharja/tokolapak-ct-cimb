@@ -49,18 +49,17 @@ class Cart extends React.Component {
       return (
         <>
           <tr>
-            <td> {index + 1} </td>
             <td> {product.productName} </td>
-            <td> {qty} </td>
+            <td>
+              <img style={{ height: "100px" }} src={product.image} alt="" />
+            </td>
             <td>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR"
               }).format(product.price)}
             </td>
-            <td>
-              <img style={{ height: "100px" }} src={product.image} alt="" />
-            </td>
+            <td> {qty} </td>
             <td>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
@@ -126,61 +125,75 @@ class Cart extends React.Component {
     });
   };
 
+  cancelPayment = () => {
+    this.setState({
+      showProductDetails: false
+    });
+  };
+
   renderTransactionDetails = () => {
     return (
-      <div>
-        <h3 className="mb-3"> Transaction Details </h3>
-        <p className="col-3">
-          Full Name <TextField value={this.props.user.fullName} />
-          <br />
-          Address
-          <TextField
-            value={this.state.transactionDetails.userId + " ini isinya user ID"}
-          />
-          <br />
-          Total Price
-          <TextField
-            className="mb-3"
-            value={new Intl.NumberFormat("id-ID", {
-              style: "currency",
-              currency: "IDR"
-            }).format(this.state.transactionDetails.totalPrice)}
-          />
-          <h6> Product List </h6>
-          <Table>
-            <thead>
-              <tr>
-                <td> Product ID </td>
-                <td> Product Name </td>
-                <td> Product Category </td>
-                <td> Product Price </td>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.transactionDetails.products.map(value => {
-                return (
-                  <tr>
-                    <td>{value.id}</td>
-                    <td>{value.productName}</td>
-                    <td>{value.category}</td>
-                    <td>
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR"
-                      }).format(value.price)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-            <tr>
-              <td colSpan={3}></td>
-              <td colSpan={1}>
-                <ButtonUI onClick={this.confirmPayment}> Confirm </ButtonUI>
-              </td>
-            </tr>
-          </Table>
-        </p>
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <div>
+          <h3 className="m-5"> Order Summary </h3>
+          <p>
+            Full Name <TextField value={this.props.user.fullName} />
+            <br />
+            Address
+            <TextField
+              value={
+                this.state.transactionDetails.userId + " ini isinya user ID"
+              }
+            />
+            <br />
+            Total Price
+            <TextField
+              className="mb-3"
+              value={new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+              }).format(this.state.transactionDetails.totalPrice)}
+            />
+            <h6> Product List </h6>
+            <Table>
+              <thead>
+                <tr>
+                  <td> Product ID </td>
+                  <td> Product Name </td>
+                  <td> Product Category </td>
+                  <td> Product Price </td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.transactionDetails.products.map(value => {
+                  return (
+                    <tr>
+                      <td>{value.id}</td>
+                      <td>{value.productName}</td>
+                      <td>{value.category}</td>
+                      <td>
+                        {new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR"
+                        }).format(value.price)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </p>
+          <div className=" mt-4 d-flex justify-content-end">
+            <ButtonUI
+              onClick={this.cancelPayment}
+              type="outlined"
+              className="mr-2"
+            >
+              Cancel
+            </ButtonUI>
+            <ButtonUI onClick={this.confirmPayment}> Confirm </ButtonUI>
+          </div>
+        </div>
       </div>
     );
   };
@@ -209,35 +222,30 @@ class Cart extends React.Component {
       );
     }
     return (
-      <div className="m-5">
-        <Table className="text-center">
-          <thead>
-            <tr>
-              <td> No {this.state.hallo} </td>
-              <td> Name </td>
-              <td> Quantity </td>
-              <td> Price </td>
-              <td> Image </td>
-              <td> Total Price </td>
-              <td> Action </td>
-            </tr>
-          </thead>
-          <tbody>{this.renderProductCart()}</tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={5}></td>
-              <td colSpan={1}>
-                <ButtonUI
-                  type="contained"
-                  onClick={this.showTransactionDetails}
-                >
-                  Check Out
-                </ButtonUI>
-              </td>
-            </tr>
-          </tfoot>
-        </Table>
-        {this.state.showProductDetails ? this.renderTransactionDetails() : null}
+      <div className="m-5 text-center">
+        <h4 className="m-5"> Your Cart </h4>
+        <div>
+          <Table>
+            <thead>
+              <tr>
+                <td colSpan={2}> Product </td>
+                <td> Price </td>
+                <td> Quantity </td>
+                <td> Total </td>
+                <td> </td>
+              </tr>
+            </thead>
+            <tbody>{this.renderProductCart()}</tbody>
+          </Table>
+          <div className="d-flex justify-content-end">
+            <ButtonUI type="contained" onClick={this.showTransactionDetails}>
+              Check Out
+            </ButtonUI>
+          </div>
+          {this.state.showProductDetails
+            ? this.renderTransactionDetails()
+            : null}
+        </div>
       </div>
     );
   }

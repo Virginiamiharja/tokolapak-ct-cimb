@@ -31,6 +31,14 @@ class AuthScreen extends React.Component {
     }
   };
 
+  componentDidUpdate() {
+    if (this.props.user.id) {
+      cookieObject.set("authData", JSON.stringify(this.props.user), {
+        path: "/"
+      });
+    }
+  }
+
   // Untuk form dengan type text
   valueHandler = (event, field, form) => {
     const { value } = event.target;

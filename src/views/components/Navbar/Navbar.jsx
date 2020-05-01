@@ -1,14 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownMenu
+} from "reactstrap";
 
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 import "./Navbar.css";
-import { Link } from "react-router-dom";
-import ButtonUI from "../Button/Button.tsx";
-
-import { connect } from "react-redux";
+import ButtonUI from "../Button/Button";
 import { logoutHandler, searchProduct } from "../../../redux/actions";
 
 const CircleBg = ({ children }) => {
@@ -18,7 +24,8 @@ const CircleBg = ({ children }) => {
 class Navbar extends React.Component {
   state = {
     searchBarIsFocused: false,
-    searcBarInput: ""
+    searcBarInput: "",
+    dropdownOpen: false
   };
 
   onFocus = () => {
@@ -29,6 +36,15 @@ class Navbar extends React.Component {
     this.setState({ searchBarIsFocused: false });
   };
 
+  logoutBtnHandler = () => {
+    this.props.logoutHandler();
+    // this.forceUpdate();
+  };
+
+  toggleDropdown = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  };
+
   render() {
     return (
       <div className="d-flex flex-row justify-content-between align-items-center py-4 navbar-container">
@@ -37,7 +53,10 @@ class Navbar extends React.Component {
             LOGO
           </Link>
         </div>
-        <div style={{ flex: 1 }} className="px-5">
+        <div
+          style={{ flex: 1 }}
+          className="px-5 d-flex flex-row justify-content-start"
+        >
           <input
             onFocus={this.onFocus}
             onBlur={this.onBlur}
@@ -54,15 +73,33 @@ class Navbar extends React.Component {
         <div className="d-flex flex-row align-items-center">
           {this.props.user.id ? (
             <>
-              <FontAwesomeIcon
-                onClick={this.props.logoutHandler}
-                icon={faUser}
-                style={{ fontSize: 24 }}
-              />
-              <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
+              <Dropdown
+                toggle={this.toggleDropdown}
+                isOpen={this.state.dropdownOpen}
+              >
+                <DropdownToggle tag="div" className="d-flex">
+                  <FontAwesomeIcon icon={faUser} style={{ fontSize: 24 }} />
+                  <p className="small ml-3 mr-4">{this.props.user.fullName}</p>
+                </DropdownToggle>
+                <DropdownMenu className="mt-2">
+                  {this.props.user.role == "admin" ? (
+                    <DropdownItem>
+                      <Link
+                        style={{ color: "inherit", textDecoration: "none" }}
+                        to="/admin/dashboard"
+                      >
+                        Dashboard
+                      </Link>
+                    </DropdownItem>
+                  ) : null}
+
+                  <DropdownItem>Members</DropdownItem>
+                  <DropdownItem>Payments</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
               <Link
+                className="d-flex flex-row"
                 to="/cart"
-                className="d-flex"
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <FontAwesomeIcon
@@ -76,24 +113,32 @@ class Navbar extends React.Component {
                   </small>
                 </CircleBg>
               </Link>
+              <ButtonUI
+                onClick={this.logoutBtnHandler}
+                className="ml-3"
+                type="textual"
+              >
+                Sign Out
+              </ButtonUI>
             </>
           ) : (
             <>
-              <Link
-                to="/auth"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <ButtonUI className="mr-3" type="textual">
-                  Sign in
-                </ButtonUI>
-              </Link>
-
-              <Link
-                to="/auth"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <ButtonUI type="contained">Sign up</ButtonUI>
-              </Link>
+              <ButtonUI className="mr-3" type="textual">
+                <Link
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  to="/auth"
+                >
+                  Sign In
+                </Link>
+              </ButtonUI>
+              <ButtonUI type="contained">
+                <Link
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  to="/auth"
+                >
+                  Sign Up
+                </Link>
+              </ButtonUI>
             </>
           )}
         </div>
