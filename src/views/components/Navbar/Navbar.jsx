@@ -17,6 +17,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import "./Navbar.css";
 import ButtonUI from "../Button/Button";
 import { logoutHandler, searchProduct, cartQty } from "../../../redux/actions";
+import { API_URL } from "../../../constants/API";
 
 const CircleBg = ({ children }) => {
   return <div className="circle-bg">{children}</div>;
@@ -49,6 +50,10 @@ class Navbar extends React.Component {
   componentDidMount() {
     this.props.cartQty(this.props.user.id);
   }
+
+  // componentWillUpdate() {
+  //   alert("Hallo");
+  // }
 
   render() {
     return (

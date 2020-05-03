@@ -21,6 +21,8 @@ import Colors from "../../../constants/Colors";
 import { API_URL } from "../../../constants/API";
 import { connect } from "react-redux";
 
+import { cartQty } from "../../../redux/actions";
+
 const dummy = [
   {
     productName: "iPhone X",
@@ -128,6 +130,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.getBestSellerData();
+    this.props.cartQty(this.props.user.id);
   }
 
   renderProducts = () => {
@@ -300,4 +303,9 @@ const mapStateToProps = state => {
     user: state.user
   };
 };
-export default connect(mapStateToProps)(Home);
+
+const mapDispatchToProps = {
+  cartQty
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -10,10 +10,12 @@ import { Table, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
 import ButtonUI from "../../components/Button/Button";
 import TextField from "../../components/TextField/TextField";
+import { cartQty } from "../../../redux/actions";
 
 class Cart extends React.Component {
   state = {
     delete: false,
+    test: 0,
     productCart: [],
     showProductDetails: false,
     transactionDetails: {
@@ -91,6 +93,8 @@ class Cart extends React.Component {
 
         // Tapi ini kita nge set state
         this.getProductCart();
+        // Ini buat ubah di navbar
+        this.props.cartQty(this.props.user.id);
 
         // Supaya dia ngerender ulang kita juga ubah statenya
         // let tempProductCart = this.state.productCart;
@@ -251,10 +255,14 @@ class Cart extends React.Component {
   }
 }
 
-const MapStateToProps = state => {
+const mapStateToProps = state => {
   return {
     user: state.user
   };
 };
 
-export default connect(MapStateToProps)(Cart);
+const mapDispatchToProps = {
+  cartQty
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

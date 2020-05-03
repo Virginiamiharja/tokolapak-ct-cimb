@@ -33,7 +33,7 @@ export default (state = init_state, action) => {
     case ON_LOGIN_FAIL:
       return { ...state, errMsg: action.payload, cookieChecked: true };
     case ON_LOGOUT_SUCCESS:
-      return { ...init_state, cookieChecked: true, cartQty: 0 };
+      return { ...init_state, cookieChecked: true };
     case "ON_REGISTER_FAIL":
       return { ...state, errMsg: action.payload, cookieChecked: true };
     case "COOKIE_CHECK":

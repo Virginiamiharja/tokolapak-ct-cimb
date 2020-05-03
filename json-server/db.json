@@ -104,7 +104,31 @@
       "userId": 2,
       "productId": 3,
       "qty": 2,
-      "id": 1
+      "id": 6
+    },
+    {
+      "userId": 1,
+      "productId": 1,
+      "qty": 3,
+      "id": 7
+    },
+    {
+      "userId": 1,
+      "productId": 2,
+      "qty": 2,
+      "id": 8
+    },
+    {
+      "userId": 3,
+      "productId": 1,
+      "qty": 1,
+      "id": 10
+    },
+    {
+      "userId": 3,
+      "productId": 6,
+      "qty": 1,
+      "id": 11
     }
   ],
   "transactions": []
