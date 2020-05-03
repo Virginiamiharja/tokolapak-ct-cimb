@@ -102,15 +102,9 @@
   "carts": [
     {
       "userId": 2,
-      "productId": 6,
-      "qty": 3,
-      "id": 1
-    },
-    {
-      "userId": 1,
       "productId": 3,
       "qty": 2,
-      "id": 2
+      "id": 1
     }
   ],
   "transactions": []

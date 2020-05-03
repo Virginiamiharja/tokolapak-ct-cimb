@@ -93,6 +93,7 @@ class ProductDetails extends React.Component {
     } = this.state.product;
     return (
       <div className="container" key={`product-${id}`}>
+        <h2> {this.state.navQty}</h2>
         <div className="row mt-4 py-4">
           <div className="col-6 text-center">
             <img
@@ -130,6 +131,8 @@ const MapStateToProps = state => {
   };
 };
 
-const MapDispatchToProps = {};
+const MapDispatchToProps = {
+  cartQty
+};
 
 export default connect(MapStateToProps, MapDispatchToProps)(ProductDetails);

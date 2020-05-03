@@ -110,6 +110,30 @@ export const searchProduct = searchInput => {
   };
 };
 
+export const cartQty = userId => {
+  return dispatch => {
+    Axios.get(`${API_URL}/carts`, {
+      params: {
+        userId
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        let cartQty = 0;
+        res.data.map(value => {
+          return (cartQty += value.qty);
+        });
+        dispatch({
+          type: "SET_CART_QTY",
+          payload: cartQty
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+};
+
 export const cookieChecker = () => {
   return {
     type: "COOKIE_CHECK"

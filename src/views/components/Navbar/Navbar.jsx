@@ -16,8 +16,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 import "./Navbar.css";
 import ButtonUI from "../Button/Button";
-import { logoutHandler, searchProduct } from "../../../redux/actions";
-import { API_URL } from "../../../constants/API";
+import { logoutHandler, searchProduct, cartQty } from "../../../redux/actions";
 
 const CircleBg = ({ children }) => {
   return <div className="circle-bg">{children}</div>;
@@ -46,6 +45,10 @@ class Navbar extends React.Component {
   toggleDropdown = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
   };
+
+  componentDidMount() {
+    this.props.cartQty(this.props.user.id);
+  }
 
   render() {
     return (
@@ -110,9 +113,9 @@ class Navbar extends React.Component {
                   style={{ fontSize: 24 }}
                 />
                 <CircleBg>
-                  <small
-                    style={{ color: "#3C64B1", fontWeight: "bold" }}
-                  ></small>
+                  <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
+                    {this.props.user.cartQty}
+                  </small>
                 </CircleBg>
               </Link>
               <ButtonUI
@@ -157,7 +160,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   logoutHandler,
-  searchProduct
+  searchProduct,
+  cartQty
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
