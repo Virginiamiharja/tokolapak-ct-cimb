@@ -26,7 +26,7 @@ class App extends React.Component {
       } else {
         this.props.cookieChecker();
       }
-    }, 3000);
+    }, 1000);
   }
 
   renderAdminRoutes = () => {
