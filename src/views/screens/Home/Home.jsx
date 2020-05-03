@@ -119,7 +119,6 @@ class Home extends React.Component {
       }
     })
       .then(res => {
-        console.log(res.data.productName);
         this.setState({ bestSellerData: res.data });
       })
       .catch(err => {
@@ -215,7 +214,6 @@ class Home extends React.Component {
               DESKTOP
             </h6>
           </Link>
-          <h5> {this.props.user.searchInput} </h5>
         </div>
         <Carousel
           className="carousel-item-home-bg "

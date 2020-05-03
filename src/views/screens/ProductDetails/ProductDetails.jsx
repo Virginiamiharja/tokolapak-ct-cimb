@@ -5,6 +5,7 @@ import Axios from "axios";
 import { API_URL } from "../../../constants/API";
 import { connect } from "react-redux";
 import swal from "sweetalert";
+import { cartQty } from "../../../redux/actions";
 
 class ProductDetails extends React.Component {
   state = {
@@ -51,6 +52,7 @@ class ProductDetails extends React.Component {
                 "Your item has been added to your cart",
                 "success"
               );
+              this.props.cartQty(this.props.user.id);
             })
             .catch(err => {
               console.log(err);
@@ -128,4 +130,6 @@ const MapStateToProps = state => {
   };
 };
 
-export default connect(MapStateToProps)(ProductDetails);
+const MapDispatchToProps = {};
+
+export default connect(MapStateToProps, MapDispatchToProps)(ProductDetails);

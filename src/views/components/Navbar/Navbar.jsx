@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import Axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/";
@@ -16,6 +17,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import "./Navbar.css";
 import ButtonUI from "../Button/Button";
 import { logoutHandler, searchProduct } from "../../../redux/actions";
+import { API_URL } from "../../../constants/API";
 
 const CircleBg = ({ children }) => {
   return <div className="circle-bg">{children}</div>;
@@ -108,9 +110,9 @@ class Navbar extends React.Component {
                   style={{ fontSize: 24 }}
                 />
                 <CircleBg>
-                  <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
-                    4
-                  </small>
+                  <small
+                    style={{ color: "#3C64B1", fontWeight: "bold" }}
+                  ></small>
                 </CircleBg>
               </Link>
               <ButtonUI
