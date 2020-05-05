@@ -124,6 +124,7 @@ class PageReport extends React.Component {
             </td> */}
             <td> {username} </td>
             <td> {email} </td>
+
             <td>
               <ButtonUI
                 // onClick={_ => this.editBtnHandler(idx)}
