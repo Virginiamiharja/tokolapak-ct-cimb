@@ -58,15 +58,7 @@ class History extends React.Component {
 
   renderTransactionList = () => {
     return this.state.transactionList.map((val, idx) => {
-      const {
-        id,
-        userId,
-        totalPrice,
-        status,
-        trxStartDate,
-        trxEndDate,
-        user
-      } = val;
+      const { id, totalPrice, status, trxStartDate, trxEndDate, user } = val;
       if (status == "approved")
         return (
           <>
@@ -88,8 +80,8 @@ class History extends React.Component {
               }}
             >
               <td> {id} </td>
-              <td> {user.fullName} </td>
-              <td>
+              <td colSpan={2}> {user.fullName} </td>
+              <td colSpan={2}>
                 {new Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR"
@@ -97,7 +89,7 @@ class History extends React.Component {
               </td>
               <td> {status} </td>
               <td> {trxStartDate} </td>
-              <td colSpan={2}></td>
+              <td> {trxEndDate} </td>
               <td>
                 <ButtonUI
                   onClick={() => {
@@ -121,15 +113,6 @@ class History extends React.Component {
                   type="contained"
                 >
                   Details
-                </ButtonUI>
-              </td>
-              <td>
-                <ButtonUI
-                  className="mt-3"
-                  type="textual"
-                  onClick={() => this.deleteTransactionHandler(id)}
-                >
-                  Delete
                 </ButtonUI>
               </td>
             </tr>
@@ -203,30 +186,6 @@ class History extends React.Component {
     });
   };
 
-  editBtnHandler = idx => {
-    this.setState({
-      editForm: {
-        ...this.state.transactionList[idx]
-      },
-      modalOpen: true
-    });
-  };
-
-  editTransactionHandler = () => {
-    Axios.patch(`${API_URL}/transactions/${this.state.editForm.id}`, {
-      status: this.state.editForm.status
-    })
-      .then(res => {
-        swal("Success!", "The transaction has been edited", "success");
-        this.setState({ modalOpen: false });
-        this.getTransactionList();
-      })
-      .catch(err => {
-        swal("Error!", "The transaction could not be edited", "error");
-        console.log(err);
-      });
-  };
-
   deleteTransactionHandler = transactionId => {
     Axios.delete(`${API_URL}/transactions/${transactionId}`)
       .then(res => {
@@ -258,141 +217,17 @@ class History extends React.Component {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Full Name</th>
-                <th>Total Price</th>
+                <th colSpan={2}>Full Name</th>
+                <th colSpan={2}>Total Price</th>
                 <th>Status</th>
                 <th>Check Out Date</th>
+                <th>Approved Date</th>
                 <th colSpan={2}></th>
               </tr>
             </thead>
             <tbody>{this.renderTransactionList()}</tbody>
           </table>
         </div>
-        {/* <div className="dashboard-form-container p-4">
-          <caption className="mb-4 mt-2">
-            <h2>Add Product</h2>
-          </caption>
-          <div className="row">
-            <div className="col-8">
-              <TextField
-                value={this.state.createForm.productName}
-                placeholder="Product Name"
-                onChange={e =>
-                  this.inputHandler(e, "productName", "createForm")
-                }
-              />
-            </div>
-            <div className="col-4">
-              <TextField
-                value={this.state.createForm.price}
-                placeholder="Price"
-                onChange={e => this.inputHandler(e, "price", "createForm")}
-              />
-            </div>
-            <div className="col-12 mt-3">
-              <textarea
-                value={this.state.createForm.desc}
-                onChange={e => this.inputHandler(e, "desc", "createForm")}
-                style={{ resize: "none" }}
-                placeholder="Description"
-                className="custom-text-input"
-              ></textarea>
-            </div>
-            <div className="col-6 mt-3">
-              <TextField
-                value={this.state.createForm.image}
-                placeholder="Image Source"
-                onChange={e => this.inputHandler(e, "image", "createForm")}
-              />
-            </div>
-            <div className="col-6 mt-3">
-              <select
-                value={this.state.createForm.category}
-                className="custom-text-input h-100 pl-3"
-                onChange={e => this.inputHandler(e, "category", "createForm")}
-              >
-                <option value="" selected disabled>
-                  All
-                </option>
-                <option value="Phone">Phone</option>
-                <option value="Tab">Tab</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Desktop">Desktop</option>
-              </select>
-            </div>
-            <div className="col-3 mt-3">
-              <ButtonUI onClick={this.createProductHandler} type="contained">
-                Create Product
-              </ButtonUI>
-            </div>
-          </div>
-        </div> */}
-        <Modal
-          toggle={this.toggleModal}
-          isOpen={this.state.modalOpen}
-          className="edit-modal"
-        >
-          <ModalHeader toggle={this.toggleModal}>
-            <caption>
-              <h3>Edit Transaction</h3>
-            </caption>
-          </ModalHeader>
-          <ModalBody>
-            <div className="row">
-              <div className="col-6">
-                <TextField
-                  value={this.state.editForm.userId}
-                  placeholder="User ID"
-                />
-              </div>
-              <div className="col-6">
-                <TextField
-                  value={new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR"
-                  }).format(this.state.editForm.totalPrice)}
-                  placeholder="Price"
-                />
-              </div>
-              <div className="col-6 mt-3">
-                <TextField
-                  value={this.state.editForm.trxStartDate}
-                  placeholder="Check Out Date"
-                />
-              </div>
-              <div className="col-6 mt-3">
-                <select
-                  value={this.state.editForm.status}
-                  className="custom-text-input h-100 pl-3"
-                  onChange={e => this.inputHandler(e, "status", "editForm")}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-
-              <div className="col-5 mt-3 offset-1">
-                <ButtonUI
-                  className="w-100"
-                  onClick={this.toggleModal}
-                  type="outlined"
-                >
-                  Cancel
-                </ButtonUI>
-              </div>
-              <div className="col-5 mt-3">
-                <ButtonUI
-                  className="w-100"
-                  onClick={this.editTransactionHandler}
-                  type="contained"
-                >
-                  Save
-                </ButtonUI>
-              </div>
-            </div>
-          </ModalBody>
-        </Modal>
       </div>
     );
   }

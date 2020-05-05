@@ -114,14 +114,10 @@ export const navCartQty = userId => {
       }
     })
       .then(res => {
-        let cartQty = 0;
-        res.data.map(value => {
-          cartQty += value.qty;
-        });
-        // alert(cartQty);
+        console.log(res.data.length);
         dispatch({
           type: "SET_NAVCART_QTY",
-          payload: cartQty
+          payload: res.data.length
         });
       })
       .catch(err => {

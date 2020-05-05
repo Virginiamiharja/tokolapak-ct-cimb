@@ -301,6 +301,7 @@ class Cart extends React.Component {
         <div className="dashboard">
           <caption className="p-3">
             <h2>Your Cart</h2>
+            <span>Click the row to see the details</span>
           </caption>
           <table className="dashboard-table">
             <thead>
@@ -335,10 +336,10 @@ class Cart extends React.Component {
                   <option value="0" selected disabled>
                     All
                   </option>
-                  <option value="100000">Instant</option>
-                  <option value="50000">Same Day</option>
-                  <option value="20000">Express</option>
-                  <option value="0">Economy</option>
+                  <option value="100000">Instant - Rp. 100.000</option>
+                  <option value="50000">Same Day - Rp. 50.000</option>
+                  <option value="20000">Express - Rp. 20.000</option>
+                  <option value="0">Economy - Free</option>
                 </select>
               </div>
               <div className="col-8">

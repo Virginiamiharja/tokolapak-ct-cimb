@@ -9,37 +9,19 @@ import swal from "sweetalert";
 
 class PageReport extends React.Component {
   state = {
-    //   Ini intinya si transaction list akan punya 1 sampe banyak transactionDetails aka productList
     userList: [],
-    productList: [],
     transactionList: [],
-
+    productList: [],
+    transactionDetails: [],
     activePage: "user",
-
     activeTransactions: [],
-    modalOpen: false
-  };
-
-  getTransactionList = () => {
-    Axios.get(`${API_URL}/transactions`, {
-      params: {
-        status: "approved",
-        _expand: "user"
-      }
-    })
-      .then(res => {
-        console.log(res.data);
-        this.setState({ transactionList: res.data });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    modalOpen: false,
+    shoppingExpenses: 0
   };
 
   getUserList = () => {
     Axios.get(`${API_URL}/users`)
       .then(res => {
-        console.log(res.data);
         this.setState({ userList: res.data });
       })
       .catch(err => {
@@ -47,202 +29,236 @@ class PageReport extends React.Component {
       });
   };
 
-  //   getProductList = () => {
-  //     Axios.get(`${API_URL}/transactionDetails`, {
-  //       params: {
-  //         _expand: "product"
-  //       }
-  //     })
-  //       .then(res => {
-  //         this.setState({ productList: res.data });
-  //       })
-  //       .catch(err => {
-  //         console.log(err);
-  //       });
-  //   };
+  getTransactionList = () => {
+    Axios.get(`${API_URL}/transactions`, {
+      params: {
+        _expand: "user",
+        status: "approved"
+      }
+    })
+      .then(res => {
+        this.setState({ transactionList: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
-  renderTransactionList = currUserId => {
-    return this.state.transactionList.map((val, idx) => {
-      const {
-        id,
-        userId,
-        totalPrice,
-        status,
-        trxStartDate,
-        trxEndDate,
-        shippingOpt,
-        user
-      } = val;
-      if (currUserId == userId)
+  renderUserList = () => {
+    return this.state.userList.map((val, idx) => {
+      const { id, username, fullName, email, password } = val;
+      return (
+        <>
+          <tr>
+            <td> {id} </td>
+            <td> {username} </td>
+            <td> {fullName} </td>
+            <td> {this.calculateShoppingExpenses(id)} </td>
+            <td>
+              <ButtonUI
+                className="mt-3"
+                type="textual"
+                onClick={() => {
+                  if (this.state.activeTransactions.includes(idx)) {
+                    this.setState({
+                      activeTransactions: [
+                        ...this.state.activeTransactions.filter(
+                          item => item !== idx
+                        )
+                      ]
+                    });
+                  } else {
+                    this.setState({
+                      activeTransactions: [
+                        ...this.state.activeTransactions,
+                        idx
+                      ]
+                    });
+                  }
+                }}
+              >
+                Detail
+              </ButtonUI>
+            </td>
+          </tr>
+          {this.renderTransactionList(id, idx)}
+        </>
+      );
+    });
+  };
+
+  renderTransactionList = (id, idx) => {
+    return this.state.transactionList.map(value => {
+      // Dia bakal keluarin transactionDetails sesuai dengan transactionId
+      if (id == value.userId) {
         return (
           <>
             <tr
-              onClick={() => {
-                if (this.state.activeTransactions.includes(idx)) {
-                  this.setState({
-                    activeTransactions: [
-                      ...this.state.activeTransactions.filter(
-                        item => item !== idx
-                      )
-                    ]
-                  });
-                } else {
-                  this.setState({
-                    activeTransactions: [...this.state.activeTransactions, idx]
-                  });
-                }
-              }}
+              className={`collapse-item ${
+                this.state.activeTransactions.includes(idx) ? "active" : null
+              }`}
             >
-              <td colSpan={2}> Transaction ID = {id} </td>
-              <td coslpan={2}>
+              <td colSpan={2}> Transaction ID {value.id} </td>
+              <td colSpan={2}>
+                Total Price per Transaction{" "}
                 {new Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR"
-                }).format(parseInt(totalPrice) + parseInt(shippingOpt))}
+                }).format(
+                  parseInt(value.totalPrice) + parseInt(value.shippingOpt)
+                )}
               </td>
-              <td> {status} </td>
-              <td> {trxStartDate} </td>
+              <td>Status {value.status}</td>
+            </tr>
+          </>
+        );
+      }
+    });
+  };
+
+  getProductList = () => {
+    Axios.get(`${API_URL}/products`)
+      .then(res => {
+        console.log(res);
+        this.setState({ productList: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  getTransactionDetails = () => {
+    Axios.get(`${API_URL}/transactiondetails`, {
+      params: {
+        _expand: "product",
+        _expand: "transaction"
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        this.setState({ transactionDetails: res.data });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  renderProductList = () => {
+    return this.state.productList.map((val, idx) => {
+      const { id, productName, price, category } = val;
+      return (
+        <>
+          <tr>
+            <td> {id} </td>
+            <td> {productName} </td>
+            <td>
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+              }).format(price)}
+            </td>
+            <td> {category} </td>
+            <td> {this.calculateProductQty(id)} </td>
+            <td>
+              <ButtonUI
+                className="mt-3"
+                type="textual"
+                onClick={() => {
+                  if (this.state.activeTransactions.includes(idx)) {
+                    this.setState({
+                      activeTransactions: [
+                        ...this.state.activeTransactions.filter(
+                          item => item !== idx
+                        )
+                      ]
+                    });
+                  } else {
+                    this.setState({
+                      activeTransactions: [
+                        ...this.state.activeTransactions,
+                        idx
+                      ]
+                    });
+                  }
+                }}
+              >
+                Detail
+              </ButtonUI>
+            </td>
+          </tr>
+          {this.renderTransactionDetails(id, idx)}
+        </>
+      );
+    });
+  };
+
+  renderTransactionDetails = (productId, idx) => {
+    return this.state.transactionDetails.map(value => {
+      if (
+        productId == value.productId &&
+        value.transaction.status == "approved"
+      )
+        return (
+          <>
+            <tr
+              className={`collapse-item ${
+                this.state.activeTransactions.includes(idx) ? "active" : null
+              }`}
+            >
+              <td colSpan={2}> Transaction Detail ID {value.id} </td>
+              <td>
+                Price{" "}
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR"
+                }).format(parseInt(value.price))}
+              </td>
+              <td>Quantity {value.quantity}</td>
+              <td>
+                Total Price{" "}
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR"
+                }).format(
+                  parseInt(value.quantity) * parseInt(value.price)
+                )}{" "}
+              </td>
+              <td>Status {value.transaction.status}</td>
             </tr>
           </>
         );
     });
   };
 
-  renderUserList = () => {
-    return this.state.userList.map(value => {
-      const { username, fullName, email, id } = value;
-      return (
-        <>
-          <tr>
-            <td> {id} </td>
-            <td> {fullName} </td>
-            {/* <td>
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR"
-              }).format(parseInt(totalPrice) + parseInt(shippingOpt))}
-            </td> */}
-            <td> {username} </td>
-            <td> {email} </td>
-
-            <td>
-              <ButtonUI
-                // onClick={_ => this.editBtnHandler(idx)}
-                type="contained"
-              >
-                Edit
-              </ButtonUI>
-            </td>
-            <td>
-              <ButtonUI
-                className="mt-3"
-                type="textual"
-                // onClick={() => this.deleteTransactionHandler(id)}
-              >
-                Delete
-              </ButtonUI>
-            </td>
-          </tr>
-          {this.renderTransactionList(id)}
-        </>
-      );
+  calculateShoppingExpenses = id => {
+    let shoppingExpenses = 0;
+    this.state.transactionList.map(value => {
+      if (id == value.userId)
+        // Buat ngitung pengeluaran yang per user yang udah di approved
+        shoppingExpenses +=
+          parseInt(value.totalPrice) + parseInt(value.shippingOpt);
+      //   this.setState({ userList: [...this.state.userList, shoppingExpenses] });
     });
+    return (
+      <>
+        {new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR"
+        }).format(shoppingExpenses)}
+      </>
+    );
   };
 
-  //   renderProductList = (id, idx) => {
-  //     return this.state.productList.map(value => {
-  //       // Dia bakal keluarin transactionDetails sesuai dengan transactionId
-  //       if (id == value.transactionId) {
-  //         return (
-  //           <>
-  //             <tr
-  //               className={`collapse-item ${
-  //                 this.state.activeTransactions.includes(idx) ? "active" : null
-  //               }`}
-  //             >
-  //               <td className="" colSpan={7}>
-  //                 <div className="d-flex m-5 justify-content-around align-items-center">
-  //                   <div className="d-flex">
-  //                     <img src={value.product.image} alt="" />
-  //                     <div className="d-flex flex-column ml-4 justify-content-center">
-  //                       <h5>{value.product.productName}</h5>
-  //                       <h6 className="mt-2">
-  //                         Category:
-  //                         <span style={{ fontWeight: "normal" }}>
-  //                           {value.product.category}
-  //                         </span>
-  //                       </h6>
-  //                       <h6 className="mt-2">
-  //                         Quantity:
-  //                         <span style={{ fontWeight: "normal" }}>
-  //                           {value.quantity}
-  //                         </span>
-  //                       </h6>
-  //                       <h6>
-  //                         Price:
-  //                         <span style={{ fontWeight: "normal" }}>
-  //                           {new Intl.NumberFormat("id-ID", {
-  //                             style: "currency",
-  //                             currency: "IDR"
-  //                           }).format(value.product.price)}
-  //                         </span>
-  //                       </h6>
-  //                       <h6>
-  //                         Description:
-  //                         <span style={{ fontWeight: "normal" }}>
-  //                           {value.product.desc}
-  //                         </span>
-  //                       </h6>
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </td>
-  //             </tr>
-  //           </>
-  //         );
-  //       }
-  //     });
-  //   };
-
-  inputHandler = (e, field, form) => {
-    let { value } = e.target;
-    this.setState({
-      [form]: {
-        ...this.state[form],
-        [field]: value
-      }
+  calculateProductQty = productId => {
+    let productQty = 0;
+    this.state.transactionDetails.map(value => {
+      if (
+        productId == value.productId &&
+        value.transaction.status == "approved"
+      )
+        productQty += value.quantity;
     });
-  };
-
-  editBtnHandler = idx => {
-    this.setState({
-      editForm: {
-        ...this.state.transactionList[idx]
-      },
-      modalOpen: true
-    });
-  };
-
-  editTransactionHandler = () => {
-    // Supaya ketika admin approve or cancel the payment dia bakal kebuat tanggal selesai transaksinya
-    var date = new Date();
-    var trxEndDate =
-      // Jangan lupa month di + 1 karena dia start dari 0
-      date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
-
-    Axios.patch(`${API_URL}/transactions/${this.state.editForm.id}`, {
-      status: this.state.editForm.status,
-      trxEndDate
-    })
-      .then(res => {
-        swal("Success!", "The transaction has been edited", "success");
-        this.setState({ modalOpen: false });
-        this.getTransactionList();
-      })
-      .catch(err => {
-        swal("Error!", "The transaction could not be edited", "error");
-        console.log(err);
-      });
+    return <>{productQty}</>;
   };
 
   toggleModal = () => {
@@ -252,7 +268,8 @@ class PageReport extends React.Component {
   componentDidMount() {
     this.getTransactionList();
     this.getUserList();
-    // this.getProductList();
+    this.getProductList();
+    this.getTransactionDetails();
   }
 
   render() {
@@ -282,94 +299,53 @@ class PageReport extends React.Component {
         </div>
 
         <div className="dashboard">
-          <caption className="p-3">
-            <h2>Transactions</h2>
-          </caption>
-          <table className="dashboard-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Full Name</th>
-                <th>Total Price</th>
-                <th>Status</th>
-                <th>Check Out Date</th>
-                <th colSpan={2}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {this.renderTransactionList()} */}
-              {this.renderUserList()}
-            </tbody>
-            {/* {this.renderUserList()} */}
-          </table>
+          {this.state.activePage == "user" ? (
+            <>
+              <caption className="p-3">
+                <h2>User Transactions</h2>
+                <span>
+                  the detail button can only be clicked if shopping expenses > 0
+                </span>
+              </caption>
+              <table className="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Shopping Expenses + Shipping Fee</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>{this.renderUserList()}</tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              <caption className="p-3">
+                <h2>Product Transactions</h2>
+                <span>
+                  the detail button can only be clicked if approved quantity > 0
+                </span>
+              </caption>
+              <table className="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Approved Quantity</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>{this.renderProductList()}</tbody>
+              </table>
+            </>
+          )}
         </div>
-
-        <Modal
-          toggle={this.toggleModal}
-          isOpen={this.state.modalOpen}
-          className="edit-modal"
-        >
-          <ModalHeader toggle={this.toggleModal}>
-            <caption>
-              <h3>Edit Transaction</h3>
-            </caption>
-          </ModalHeader>
-          <ModalBody>
-            <div className="row">
-              <div className="col-6">
-                <TextField
-                  //   value={this.state.editForm.userId}
-                  placeholder="User ID"
-                />
-              </div>
-              <div className="col-6">
-                <TextField
-                  //   value={new Intl.NumberFormat("id-ID", {
-                  //     style: "currency",
-                  //     currency: "IDR"
-                  //   }).format(this.state.editForm.totalPrice)}
-                  placeholder="Price"
-                />
-              </div>
-              <div className="col-6 mt-3">
-                <TextField
-                  //   value={this.state.editForm.trxStartDate}
-                  placeholder="Check Out Date"
-                />
-              </div>
-              <div className="col-6 mt-3">
-                <select
-                  //   value={this.state.editForm.status}
-                  className="custom-text-input h-100 pl-3"
-                  onChange={e => this.inputHandler(e, "status", "editForm")}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-
-              <div className="col-5 mt-3 offset-1">
-                <ButtonUI
-                  className="w-100"
-                  onClick={this.toggleModal}
-                  type="outlined"
-                >
-                  Cancel
-                </ButtonUI>
-              </div>
-              <div className="col-5 mt-3">
-                <ButtonUI
-                  className="w-100"
-                  //   onClick={this.editTransactionHandler}
-                  type="contained"
-                >
-                  Save
-                </ButtonUI>
-              </div>
-            </div>
-          </ModalBody>
-        </Modal>
       </div>
     );
   }

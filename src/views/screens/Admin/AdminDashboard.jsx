@@ -6,6 +6,8 @@ import { API_URL } from "../../../constants/API";
 import ButtonUI from "../../components/Button/Button";
 import TextField from "../../components/TextField/TextField";
 import swal from "sweetalert";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 class AdminDashboard extends React.Component {
   state = {
@@ -199,114 +201,48 @@ class AdminDashboard extends React.Component {
   }
 
   render() {
-    return (
-      <div className="container py-4">
-        <div className="dashboard">
-          <caption className="p-3">
-            <h2>Products</h2>
-          </caption>
-          <table className="dashboard-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>{this.renderProductList()}</tbody>
-          </table>
-        </div>
-        <div className="dashboard-form-container p-4">
-          <caption className="mb-4 mt-2">
-            <h2>Add Product</h2>
-          </caption>
-          <div className="row">
-            <div className="col-8">
-              <TextField
-                value={this.state.createForm.productName}
-                placeholder="Product Name"
-                onChange={e =>
-                  this.inputHandler(e, "productName", "createForm")
-                }
-              />
-            </div>
-            <div className="col-4">
-              <TextField
-                value={this.state.createForm.price}
-                placeholder="Price"
-                onChange={e => this.inputHandler(e, "price", "createForm")}
-              />
-            </div>
-            <div className="col-12 mt-3">
-              <textarea
-                value={this.state.createForm.desc}
-                onChange={e => this.inputHandler(e, "desc", "createForm")}
-                style={{ resize: "none" }}
-                placeholder="Description"
-                className="custom-text-input"
-              ></textarea>
-            </div>
-            <div className="col-6 mt-3">
-              <TextField
-                value={this.state.createForm.image}
-                placeholder="Image Source"
-                onChange={e => this.inputHandler(e, "image", "createForm")}
-              />
-            </div>
-            <div className="col-6 mt-3">
-              <select
-                value={this.state.createForm.category}
-                className="custom-text-input h-100 pl-3"
-                onChange={e => this.inputHandler(e, "category", "createForm")}
-              >
-                <option value="" selected disabled>
-                  All
-                </option>
-                <option value="Phone">Phone</option>
-                <option value="Tab">Tab</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Desktop">Desktop</option>
-              </select>
-            </div>
-            <div className="col-3 mt-3">
-              <ButtonUI onClick={this.createProductHandler} type="contained">
-                Create Product
-              </ButtonUI>
-            </div>
-          </div>
-        </div>
-        <Modal
-          toggle={this.toggleModal}
-          isOpen={this.state.modalOpen}
-          className="edit-modal"
-        >
-          <ModalHeader toggle={this.toggleModal}>
-            <caption>
-              <h3>Edit Product</h3>
+      return (
+        <div className="container py-4">
+          <div className="dashboard">
+            <caption className="p-3">
+              <h2>Products</h2>
             </caption>
-          </ModalHeader>
-          <ModalBody>
+            <table className="dashboard-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>{this.renderProductList()}</tbody>
+            </table>
+          </div>
+          <div className="dashboard-form-container p-4">
+            <caption className="mb-4 mt-2">
+              <h2>Add Product</h2>
+            </caption>
             <div className="row">
               <div className="col-8">
                 <TextField
-                  value={this.state.editForm.productName}
+                  value={this.state.createForm.productName}
                   placeholder="Product Name"
                   onChange={e =>
-                    this.inputHandler(e, "productName", "editForm")
+                    this.inputHandler(e, "productName", "createForm")
                   }
                 />
               </div>
               <div className="col-4">
                 <TextField
-                  value={this.state.editForm.price}
+                  value={this.state.createForm.price}
                   placeholder="Price"
-                  onChange={e => this.inputHandler(e, "price", "editForm")}
+                  onChange={e => this.inputHandler(e, "price", "createForm")}
                 />
               </div>
               <div className="col-12 mt-3">
                 <textarea
-                  value={this.state.editForm.desc}
-                  onChange={e => this.inputHandler(e, "desc", "editForm")}
+                  value={this.state.createForm.desc}
+                  onChange={e => this.inputHandler(e, "desc", "createForm")}
                   style={{ resize: "none" }}
                   placeholder="Description"
                   className="custom-text-input"
@@ -314,50 +250,122 @@ class AdminDashboard extends React.Component {
               </div>
               <div className="col-6 mt-3">
                 <TextField
-                  value={this.state.editForm.image}
+                  value={this.state.createForm.image}
                   placeholder="Image Source"
-                  onChange={e => this.inputHandler(e, "image", "editForm")}
+                  onChange={e => this.inputHandler(e, "image", "createForm")}
                 />
               </div>
               <div className="col-6 mt-3">
                 <select
-                  value={this.state.editForm.category}
+                  value={this.state.createForm.category}
                   className="custom-text-input h-100 pl-3"
-                  onChange={e => this.inputHandler(e, "category", "editForm")}
+                  onChange={e => this.inputHandler(e, "category", "createForm")}
                 >
+                  <option value="" selected disabled>
+                    All
+                  </option>
                   <option value="Phone">Phone</option>
                   <option value="Tab">Tab</option>
                   <option value="Laptop">Laptop</option>
                   <option value="Desktop">Desktop</option>
                 </select>
               </div>
-              <div className="col-12 text-center my-3">
-                <img src={this.state.editForm.image} alt="" />
-              </div>
-              <div className="col-5 mt-3 offset-1">
-                <ButtonUI
-                  className="w-100"
-                  onClick={this.toggleModal}
-                  type="outlined"
-                >
-                  Cancel
-                </ButtonUI>
-              </div>
-              <div className="col-5 mt-3">
-                <ButtonUI
-                  className="w-100"
-                  onClick={this.editProductHandler}
-                  type="contained"
-                >
-                  Save
+              <div className="col-3 mt-3">
+                <ButtonUI onClick={this.createProductHandler} type="contained">
+                  Create Product
                 </ButtonUI>
               </div>
             </div>
-          </ModalBody>
-        </Modal>
-      </div>
-    );
+          </div>
+          <Modal
+            toggle={this.toggleModal}
+            isOpen={this.state.modalOpen}
+            className="edit-modal"
+          >
+            <ModalHeader toggle={this.toggleModal}>
+              <caption>
+                <h3>Edit Product</h3>
+              </caption>
+            </ModalHeader>
+            <ModalBody>
+              <div className="row">
+                <div className="col-8">
+                  <TextField
+                    value={this.state.editForm.productName}
+                    placeholder="Product Name"
+                    onChange={e =>
+                      this.inputHandler(e, "productName", "editForm")
+                    }
+                  />
+                </div>
+                <div className="col-4">
+                  <TextField
+                    value={this.state.editForm.price}
+                    placeholder="Price"
+                    onChange={e => this.inputHandler(e, "price", "editForm")}
+                  />
+                </div>
+                <div className="col-12 mt-3">
+                  <textarea
+                    value={this.state.editForm.desc}
+                    onChange={e => this.inputHandler(e, "desc", "editForm")}
+                    style={{ resize: "none" }}
+                    placeholder="Description"
+                    className="custom-text-input"
+                  ></textarea>
+                </div>
+                <div className="col-6 mt-3">
+                  <TextField
+                    value={this.state.editForm.image}
+                    placeholder="Image Source"
+                    onChange={e => this.inputHandler(e, "image", "editForm")}
+                  />
+                </div>
+                <div className="col-6 mt-3">
+                  <select
+                    value={this.state.editForm.category}
+                    className="custom-text-input h-100 pl-3"
+                    onChange={e => this.inputHandler(e, "category", "editForm")}
+                  >
+                    <option value="Phone">Phone</option>
+                    <option value="Tab">Tab</option>
+                    <option value="Laptop">Laptop</option>
+                    <option value="Desktop">Desktop</option>
+                  </select>
+                </div>
+                <div className="col-12 text-center my-3">
+                  <img src={this.state.editForm.image} alt="" />
+                </div>
+                <div className="col-5 mt-3 offset-1">
+                  <ButtonUI
+                    className="w-100"
+                    onClick={this.toggleModal}
+                    type="outlined"
+                  >
+                    Cancel
+                  </ButtonUI>
+                </div>
+                <div className="col-5 mt-3">
+                  <ButtonUI
+                    className="w-100"
+                    onClick={this.editProductHandler}
+                    type="contained"
+                  >
+                    Save
+                  </ButtonUI>
+                </div>
+              </div>
+            </ModalBody>
+          </Modal>
+        </div>
+      );
   }
 }
 
-export default AdminDashboard;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps)(AdminDashboard);

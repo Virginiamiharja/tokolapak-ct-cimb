@@ -20,7 +20,8 @@ class AdminPayments extends React.Component {
       totalPrice: 0,
       status: "",
       trxStartDate: "",
-      trxEndDate: ""
+      trxEndDate: "",
+      shippingOpt: 0
     },
 
     activeTransactions: [],
@@ -70,23 +71,7 @@ class AdminPayments extends React.Component {
       if (this.state.activePage == status)
         return (
           <>
-            <tr
-              onClick={() => {
-                if (this.state.activeTransactions.includes(idx)) {
-                  this.setState({
-                    activeTransactions: [
-                      ...this.state.activeTransactions.filter(
-                        item => item !== idx
-                      )
-                    ]
-                  });
-                } else {
-                  this.setState({
-                    activeTransactions: [...this.state.activeTransactions, idx]
-                  });
-                }
-              }}
-            >
+            <tr>
               <td> {id} </td>
               <td> {user.fullName} </td>
               <td>
@@ -96,6 +81,23 @@ class AdminPayments extends React.Component {
                 }).format(parseInt(totalPrice) + parseInt(shippingOpt))}
               </td>
               <td> {status} </td>
+              <td>
+                <select
+                  value={shippingOpt}
+                  className="custom-text-input h-100 pl-3"
+                  onChange={e =>
+                    this.inputHandler(e, "shippingOpt", "transactions")
+                  }
+                >
+                  <option value="0" selected disabled>
+                    All
+                  </option>
+                  <option value="100000">Instant - Rp. 100.000</option>
+                  <option value="50000">Same Day - Rp. 50.000</option>
+                  <option value="20000">Express - Rp. 20.000</option>
+                  <option value="0">Economy - Free</option>
+                </select>
+              </td>
               <td> {trxStartDate} </td>
               <td>
                 <ButtonUI
@@ -109,9 +111,26 @@ class AdminPayments extends React.Component {
                 <ButtonUI
                   className="mt-3"
                   type="textual"
-                  onClick={() => this.deleteTransactionHandler(id)}
+                  onClick={() => {
+                    if (this.state.activeTransactions.includes(idx)) {
+                      this.setState({
+                        activeTransactions: [
+                          ...this.state.activeTransactions.filter(
+                            item => item !== idx
+                          )
+                        ]
+                      });
+                    } else {
+                      this.setState({
+                        activeTransactions: [
+                          ...this.state.activeTransactions,
+                          idx
+                        ]
+                      });
+                    }
+                  }}
                 >
-                  Delete
+                  Detail
                 </ButtonUI>
               </td>
             </tr>
@@ -274,6 +293,7 @@ class AdminPayments extends React.Component {
                 <th>Full Name</th>
                 <th>Total Price</th>
                 <th>Status</th>
+                <th>Shipping Fee</th>
                 <th>Check Out Date</th>
                 <th colSpan={2}></th>
               </tr>
@@ -281,65 +301,6 @@ class AdminPayments extends React.Component {
             <tbody>{this.renderTransactionList()}</tbody>
           </table>
         </div>
-        {/* <div className="dashboard-form-container p-4">
-          <caption className="mb-4 mt-2">
-            <h2>Add Product</h2>
-          </caption>
-          <div className="row">
-            <div className="col-8">
-              <TextField
-                value={this.state.createForm.productName}
-                placeholder="Product Name"
-                onChange={e =>
-                  this.inputHandler(e, "productName", "createForm")
-                }
-              />
-            </div>
-            <div className="col-4">
-              <TextField
-                value={this.state.createForm.price}
-                placeholder="Price"
-                onChange={e => this.inputHandler(e, "price", "createForm")}
-              />
-            </div>
-            <div className="col-12 mt-3">
-              <textarea
-                value={this.state.createForm.desc}
-                onChange={e => this.inputHandler(e, "desc", "createForm")}
-                style={{ resize: "none" }}
-                placeholder="Description"
-                className="custom-text-input"
-              ></textarea>
-            </div>
-            <div className="col-6 mt-3">
-              <TextField
-                value={this.state.createForm.image}
-                placeholder="Image Source"
-                onChange={e => this.inputHandler(e, "image", "createForm")}
-              />
-            </div>
-            <div className="col-6 mt-3">
-              <select
-                value={this.state.createForm.category}
-                className="custom-text-input h-100 pl-3"
-                onChange={e => this.inputHandler(e, "category", "createForm")}
-              >
-                <option value="" selected disabled>
-                  All
-                </option>
-                <option value="Phone">Phone</option>
-                <option value="Tab">Tab</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Desktop">Desktop</option>
-              </select>
-            </div>
-            <div className="col-3 mt-3">
-              <ButtonUI onClick={this.createProductHandler} type="contained">
-                Create Product
-              </ButtonUI>
-            </div>
-          </div>
-        </div> */}
         <Modal
           toggle={this.toggleModal}
           isOpen={this.state.modalOpen}
@@ -363,7 +324,10 @@ class AdminPayments extends React.Component {
                   value={new Intl.NumberFormat("id-ID", {
                     style: "currency",
                     currency: "IDR"
-                  }).format(this.state.editForm.totalPrice)}
+                  }).format(
+                    parseInt(this.state.editForm.totalPrice) +
+                      parseInt(this.state.editForm.shippingOpt)
+                  )}
                   placeholder="Price"
                 />
               </div>

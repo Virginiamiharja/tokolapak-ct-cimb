@@ -101,22 +101,22 @@
   ],
   "carts": [
     {
-      "userId": 4,
-      "productId": 2,
-      "qty": 5,
-      "id": 2
+      "userId": 1,
+      "productId": 1,
+      "qty": 3,
+      "id": 3
     },
     {
       "userId": 1,
       "productId": 2,
       "qty": 2,
-      "id": 6
+      "id": 4
     },
     {
       "userId": 1,
       "productId": 5,
-      "qty": 1,
-      "id": 7
+      "qty": 2,
+      "id": 5
     }
   ],
   "transactions": [
@@ -132,9 +132,9 @@
     {
       "userId": 2,
       "totalPrice": 102000000,
-      "status": "pending",
+      "status": "approved",
       "trxStartDate": "5/5/2020",
-      "trxEndDate": "",
+      "trxEndDate": "5/5/2020",
       "shippingOpt": "100000",
       "id": 2
     },
@@ -146,6 +146,33 @@
       "trxEndDate": "5/5/2020",
       "shippingOpt": "100000",
       "id": 3
+    },
+    {
+      "userId": 1,
+      "totalPrice": 130000000,
+      "status": "pending",
+      "trxStartDate": "5/5/2020",
+      "trxEndDate": "",
+      "shippingOpt": "50000",
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "totalPrice": 12000000,
+      "status": "pending",
+      "trxStartDate": "5/5/2020",
+      "trxEndDate": "",
+      "shippingOpt": "100000",
+      "id": 5
+    },
+    {
+      "userId": 3,
+      "totalPrice": 181000000,
+      "status": "pending",
+      "trxStartDate": "5/5/2020",
+      "trxEndDate": "",
+      "shippingOpt": 0,
+      "id": 6
     }
   ],
   "transactiondetails": [
@@ -180,6 +207,54 @@
       "quantity": 2,
       "totalPrice": 30000000,
       "id": 4
+    },
+    {
+      "transactionId": 4,
+      "productId": 2,
+      "price": 15000000,
+      "quantity": 2,
+      "totalPrice": 30000000,
+      "id": 5
+    },
+    {
+      "transactionId": 4,
+      "productId": 5,
+      "price": 20000000,
+      "quantity": 3,
+      "totalPrice": 60000000,
+      "id": 6
+    },
+    {
+      "transactionId": 4,
+      "productId": 3,
+      "price": 20000000,
+      "quantity": 2,
+      "totalPrice": 40000000,
+      "id": 7
+    },
+    {
+      "transactionId": 5,
+      "productId": 1,
+      "price": "6000000",
+      "quantity": 2,
+      "totalPrice": 12000000,
+      "id": 8
+    },
+    {
+      "transactionId": 6,
+      "productId": 2,
+      "price": 15000000,
+      "quantity": 3,
+      "totalPrice": 45000000,
+      "id": 9
+    },
+    {
+      "transactionId": 6,
+      "productId": 4,
+      "price": 34000000,
+      "quantity": 4,
+      "totalPrice": 136000000,
+      "id": 10
     }
   ],
   "wishlists": []
