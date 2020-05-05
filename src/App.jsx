@@ -9,10 +9,16 @@ import Navbar from "./views/components/Navbar/Navbar";
 import AuthScreen from "./views/screens/Auth/AuthScreen";
 import Cookie from "universal-cookie";
 import { connect } from "react-redux";
-import { keepLoginHandler, cookieChecker, cartQty } from "./redux/actions/";
+import { keepLoginHandler, cookieChecker } from "./redux/actions/";
 import ProductDetails from "./views/screens/ProductDetails/ProductDetails";
 import Cart from "./views/screens/Cart/Cart";
 import AdminDashboard from "./views/screens/Admin/AdminDashboard";
+import AdminMembers from "./views/screens/Admin/AdminMembers";
+import AdminPayments from "./views/screens/Admin/AdminPayments";
+import History from "./views/screens/History/History";
+import Wishlist from "./views/screens/Wishlist/Wishlist";
+import PageReport from "./views/screens/Admin/PageReport";
+import PageNotFound from "./views/screens/PageNotFound/PageNotFound";
 
 const cookieObject = new Cookie();
 
@@ -20,18 +26,32 @@ class App extends React.Component {
   componentDidMount() {
     // Set time out ini gimmick aja untuk tau cara kerja cookie check
     setTimeout(() => {
-      let cookieResult = cookieObject.get("authData");
+      let cookieResult = cookieObject.get("authData", { path: "/" });
       if (cookieResult) {
         this.props.keepLoginHandler(cookieResult);
       } else {
         this.props.cookieChecker();
       }
-    }, 1000);
+    }, 2000);
   }
 
-  renderAdminRoutes = () => {
+  renderRoutes = () => {
     if (this.props.user.role == "admin") {
-      return <Route exact path="/admin/dashboard" component={AdminDashboard} />;
+      return (
+        <>
+          <Route exact path="/admin/dashboard" component={AdminDashboard} />
+          <Route exact path="/admin/members" component={AdminMembers} />
+          <Route exact path="/admin/payments" component={AdminPayments} />
+          <Route exact path="/admin/pagereport" component={PageReport} />
+        </>
+      );
+    } else if (this.props.user.role == "user") {
+      return (
+        <>
+          <Route exact path="/user/history" component={History} />
+          <Route exact path="/user/wishlist" component={Wishlist} />
+        </>
+      );
     }
   };
 
@@ -49,9 +69,9 @@ class App extends React.Component {
               component={ProductDetails}
             />
             <Route exact path="/cart" component={Cart} />
-            {this.renderAdminRoutes()}
+            {this.renderRoutes()}
+            <Route path="*" component={PageNotFound} />
           </Switch>
-
           <div style={{ height: "120px" }} />
         </>
       );
@@ -69,8 +89,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   keepLoginHandler,
-  cookieChecker,
-  cartQty
+  cookieChecker
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

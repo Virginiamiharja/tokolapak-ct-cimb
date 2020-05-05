@@ -9,9 +9,7 @@ import {
   faHeadset
 } from "@fortawesome/free-solid-svg-icons";
 import "./Home.css";
-
 import ProductCard from "../../components/Cards/ProductCard";
-
 import iPhoneX from "../../../assets/images/Showcase/iPhone-X.png";
 import iPhone8 from "../../../assets/images/Showcase/iPhone-8.png";
 import iPadPro from "../../../assets/images/Showcase/iPad-Pro.png";
@@ -20,8 +18,7 @@ import CarouselShowcaseItem from "./CarouselShowcaseItem.tsx";
 import Colors from "../../../constants/Colors";
 import { API_URL } from "../../../constants/API";
 import { connect } from "react-redux";
-
-import { cartQty } from "../../../redux/actions";
+import { navCartQty } from "../../../redux/actions";
 
 const dummy = [
   {
@@ -130,7 +127,8 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.getBestSellerData();
-    this.props.cartQty(this.props.user.id);
+    // Sengaja di pasang disini biar pas masuk home dia langsung ke trigger karena pake component did update di navbar bikin error
+    this.props.navCartQty(this.props.user.id);
   }
 
   renderProducts = () => {
@@ -139,7 +137,7 @@ class Home extends React.Component {
       if (
         val.productName
           .toLowerCase()
-          .startsWith(this.props.user.searchInput.toLowerCase())
+          .startsWith(this.props.search.searchInput.toLowerCase())
       ) {
         return (
           <Link
@@ -300,12 +298,13 @@ class Home extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    search: state.search
   };
 };
 
 const mapDispatchToProps = {
-  cartQty
+  navCartQty
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

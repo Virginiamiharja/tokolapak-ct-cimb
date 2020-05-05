@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Axios from "axios";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/";
 import {
@@ -11,12 +10,14 @@ import {
   DropdownToggle,
   DropdownMenu
 } from "reactstrap";
-
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-
 import "./Navbar.css";
 import ButtonUI from "../Button/Button";
-import { logoutHandler, searchProduct, cartQty } from "../../../redux/actions";
+import {
+  logoutHandler,
+  searchProduct,
+  navCartQty
+} from "../../../redux/actions";
 import { API_URL } from "../../../constants/API";
 
 const CircleBg = ({ children }) => {
@@ -27,7 +28,8 @@ class Navbar extends React.Component {
   state = {
     searchBarIsFocused: false,
     searcBarInput: "",
-    dropdownOpen: false
+    dropdownOpen: false,
+    cartQty: 0
   };
 
   onFocus = () => {
@@ -48,12 +50,8 @@ class Navbar extends React.Component {
   };
 
   componentDidMount() {
-    this.props.cartQty(this.props.user.id);
+    this.props.navCartQty(this.props.user.id);
   }
-
-  // componentWillUpdate() {
-  //   alert("Hallo");
-  // }
 
   render() {
     return (
@@ -75,9 +73,10 @@ class Navbar extends React.Component {
             }`}
             type="text"
             placeholder="Cari produk impianmu disini"
-            onChange={e => {
-              this.props.searchProduct(e.target.value);
-            }}
+            // onChange={e => {
+            //   this.props.searchProduct(e.target.value);
+            // }}
+            onChange={this.props.searchProduct}
           />
         </div>
         <div className="d-flex flex-row align-items-center">
@@ -93,18 +92,51 @@ class Navbar extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu className="mt-2">
                   {this.props.user.role == "admin" ? (
-                    <DropdownItem>
+                    <>
+                      <DropdownItem>
+                        <Link
+                          style={{ color: "inherit", textDecoration: "none" }}
+                          to="/admin/dashboard"
+                        >
+                          Dashboard
+                        </Link>
+                      </DropdownItem>
                       <Link
                         style={{ color: "inherit", textDecoration: "none" }}
-                        to="/admin/dashboard"
+                        to="/admin/members"
                       >
-                        Dashboard
+                        <DropdownItem>Members</DropdownItem>
                       </Link>
-                    </DropdownItem>
-                  ) : null}
+                      <Link
+                        style={{ color: "inherit", textDecoration: "none" }}
+                        to="/admin/payments"
+                      >
+                        <DropdownItem>Payments</DropdownItem>
+                      </Link>
+                      <Link
+                        style={{ color: "inherit", textDecoration: "none" }}
+                        to="/admin/pagereport"
+                      >
+                        <DropdownItem>Page Report</DropdownItem>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        style={{ color: "inherit", textDecoration: "none" }}
+                        to="/user/history"
+                      >
+                        <DropdownItem>History</DropdownItem>
+                      </Link>
 
-                  <DropdownItem>Members</DropdownItem>
-                  <DropdownItem>Payments</DropdownItem>
+                      <Link
+                        style={{ color: "inherit", textDecoration: "none" }}
+                        to="/user/wishlist"
+                      >
+                        <DropdownItem>Wishlist</DropdownItem>
+                      </Link>
+                    </>
+                  )}
                 </DropdownMenu>
               </Dropdown>
               <Link
@@ -119,7 +151,7 @@ class Navbar extends React.Component {
                 />
                 <CircleBg>
                   <small style={{ color: "#3C64B1", fontWeight: "bold" }}>
-                    {this.props.user.cartQty}
+                    {this.props.product.navCartQty}
                   </small>
                 </CircleBg>
               </Link>
@@ -159,14 +191,16 @@ class Navbar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    search: state.search,
+    product: state.product
   };
 };
 
 const mapDispatchToProps = {
   logoutHandler,
   searchProduct,
-  cartQty
+  navCartQty
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

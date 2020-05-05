@@ -1,13 +1,13 @@
 import React from "react";
-import "./AdminDashboard.css";
-import { Modal, ModalHeader, ModalBody } from "reactstrap";
+import "./Wishlist.css";
 import Axios from "axios";
 import { API_URL } from "../../../constants/API";
 import ButtonUI from "../../components/Button/Button";
-import TextField from "../../components/TextField/TextField";
 import swal from "sweetalert";
+import { addToCartHandler, addToWishlistHandler } from "../../../redux/actions";
+import { connect } from "react-redux";
 
-class AdminDashboard extends React.Component {
+class Wishlist extends React.Component {
   state = {
     productList: [],
 
@@ -19,21 +19,18 @@ class AdminDashboard extends React.Component {
       desc: ""
     },
 
-    editForm: {
-      id: 0,
-      productName: "",
-      price: 0,
-      category: "",
-      image: "",
-      desc: ""
-    },
-
     activeProducts: [],
     modalOpen: false
   };
 
-  getProductList = () => {
-    Axios.get(`${API_URL}/products`)
+  getWishlist = () => {
+    Axios.get(`${API_URL}/wishlists`, {
+      params: {
+        userId: this.props.user.id,
+        // http://localhost:3001/carts?_expand=product&_expand=user
+        _expand: "product"
+      }
+    })
       .then(res => {
         this.setState({ productList: res.data });
       })
@@ -42,9 +39,9 @@ class AdminDashboard extends React.Component {
       });
   };
 
-  renderProductList = () => {
+  renderWishlist = () => {
     return this.state.productList.map((val, idx) => {
-      const { id, productName, price, category, image, desc } = val;
+      const { id, qty, productId, product } = val;
       return (
         <>
           <tr
@@ -63,12 +60,12 @@ class AdminDashboard extends React.Component {
             }}
           >
             <td> {id} </td>
-            <td> {productName} </td>
+            <td> {product.productName} </td>
             <td>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR"
-              }).format(price)}
+              }).format(product.price)}
             </td>
           </tr>
           <tr
@@ -79,12 +76,15 @@ class AdminDashboard extends React.Component {
             <td className="" colSpan={3}>
               <div className="d-flex m-5 justify-content-around align-items-center">
                 <div className="d-flex">
-                  <img src={image} alt="" />
+                  <img src={product.image} alt="" />
                   <div className="d-flex flex-column ml-4 justify-content-center">
-                    <h5>{productName}</h5>
+                    <h5>{product.productName}</h5>
                     <h6 className="mt-2">
                       Category:
-                      <span style={{ fontWeight: "normal" }}> {category}</span>
+                      <span style={{ fontWeight: "normal" }}>
+                        {" "}
+                        {product.category}
+                      </span>
                     </h6>
                     <h6>
                       Price:
@@ -92,28 +92,35 @@ class AdminDashboard extends React.Component {
                         {new Intl.NumberFormat("id-ID", {
                           style: "currency",
                           currency: "IDR"
-                        }).format(price)}
+                        }).format(product.price)}
                       </span>
                     </h6>
                     <h6>
                       Description:
-                      <span style={{ fontWeight: "normal" }}> {desc}</span>
+                      <span style={{ fontWeight: "normal" }}>
+                        {" "}
+                        {product.desc}
+                      </span>
                     </h6>
                   </div>
                 </div>
                 <div className="d-flex flex-column align-items-center">
                   <ButtonUI
-                    onClick={_ => this.editBtnHandler(idx)}
-                    type="contained"
+                    onClick={() =>
+                      this.props.addToCartHandler(
+                        this.props.user.id,
+                        this.state.product.id
+                      )
+                    }
                   >
-                    Edit
+                    Add To Cart
                   </ButtonUI>
                   <ButtonUI
                     className="mt-3"
                     type="textual"
-                    onClick={() => this.deleteProductHandler(id)}
+                    onClick={() => this.deleteWishlistHandler(id)}
                   >
-                    Delete
+                    Delete from Wishlist
                   </ButtonUI>
                 </div>
               </div>
@@ -134,56 +141,11 @@ class AdminDashboard extends React.Component {
     });
   };
 
-  createProductHandler = () => {
-    Axios.post(`${API_URL}/products`, this.state.createForm)
-      .then(res => {
-        swal("Success!", "Your item has been added to the list", "success");
-        this.setState({
-          createForm: {
-            productName: "",
-            price: 0,
-            category: "",
-            image: "",
-            desc: ""
-          }
-        });
-        this.getProductList();
-      })
-      .catch(err => {
-        swal("Error!", "Your item could not be added to the list", "error");
-      });
-  };
-
-  editBtnHandler = idx => {
-    this.setState({
-      editForm: {
-        ...this.state.productList[idx]
-      },
-      modalOpen: true
-    });
-  };
-
-  editProductHandler = () => {
-    Axios.put(
-      `${API_URL}/products/${this.state.editForm.id}`,
-      this.state.editForm
-    )
-      .then(res => {
-        swal("Success!", "Your item has been edited", "success");
-        this.setState({ modalOpen: false });
-        this.getProductList();
-      })
-      .catch(err => {
-        swal("Error!", "Your item could not be edited", "error");
-        console.log(err);
-      });
-  };
-
-  deleteProductHandler = productId => {
-    Axios.delete(`${API_URL}/products/${productId}`)
+  deleteWishlistHandler = wishlistId => {
+    Axios.delete(`${API_URL}/wishlists/${wishlistId}`)
       .then(res => {
         swal("Success", "The product has been deleted", "success");
-        this.getProductList();
+        this.getWishlist();
       })
       .catch(err => {
         console.log(err);
@@ -195,7 +157,7 @@ class AdminDashboard extends React.Component {
   };
 
   componentDidMount() {
-    this.getProductList();
+    this.getWishlist();
   }
 
   render() {
@@ -213,10 +175,10 @@ class AdminDashboard extends React.Component {
                 <th>Price</th>
               </tr>
             </thead>
-            <tbody>{this.renderProductList()}</tbody>
+            <tbody>{this.renderWishlist()}</tbody>
           </table>
         </div>
-        <div className="dashboard-form-container p-4">
+        {/* <div className="dashboard-form-container p-4">
           <caption className="mb-4 mt-2">
             <h2>Add Product</h2>
           </caption>
@@ -274,8 +236,8 @@ class AdminDashboard extends React.Component {
               </ButtonUI>
             </div>
           </div>
-        </div>
-        <Modal
+        </div> */}
+        {/* <Modal
           toggle={this.toggleModal}
           isOpen={this.state.modalOpen}
           className="edit-modal"
@@ -354,10 +316,21 @@ class AdminDashboard extends React.Component {
               </div>
             </div>
           </ModalBody>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }
 }
 
-export default AdminDashboard;
+const MapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+const MapDispatchToProps = {
+  addToCartHandler,
+  addToWishlistHandler
+};
+
+export default connect(MapStateToProps, MapDispatchToProps)(Wishlist);

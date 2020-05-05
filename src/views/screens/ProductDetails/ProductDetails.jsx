@@ -4,8 +4,11 @@ import ButtonUI from "../../components/Button/Button";
 import Axios from "axios";
 import { API_URL } from "../../../constants/API";
 import { connect } from "react-redux";
-import swal from "sweetalert";
-import { cartQty } from "../../../redux/actions";
+import {
+  navCartQty,
+  addToCartHandler,
+  addToWishlistHandler
+} from "../../../redux/actions";
 
 class ProductDetails extends React.Component {
   state = {
@@ -31,55 +34,8 @@ class ProductDetails extends React.Component {
   }
 
   addToCartHandler = () => {
-    // Kita cek di cart ada id product di user id yang sama ga
-    Axios.get(`${API_URL}/carts`, {
-      params: {
-        userId: this.props.user.id,
-        productId: this.state.product.id
-      }
-    })
-      .then(res => {
-        // Apabila tidak ada data yang sama
-        if (res.data.length > 0) {
-          // Qty nya aja yang di edit jadi nambah 1
-          Axios.patch(`${API_URL}/carts/${res.data[0].id}`, {
-            qty: res.data[0].qty + 1
-          })
-            .then(res => {
-              console.log(res);
-              swal(
-                "Add to cart",
-                "Your item has been added to your cart",
-                "success"
-              );
-              this.props.cartQty(this.props.user.id);
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        } else {
-          console.log(this.props.user.id);
-          // Kalo tidak ada data yang sama, di post ke carts
-          Axios.post(`${API_URL}/carts`, {
-            userId: this.props.user.id,
-            // Bisa dari state productId bisa juga dari query params
-            productId: this.state.product.id,
-            qty: 1
-          })
-            .then(res => {
-              console.log(res);
-              swal(
-                "Add to cart",
-                "Your item has been added to your cart",
-                "success"
-              );
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }
-      })
-      .catch(err => console.log(err));
+    this.props.addToCartHandler(this.props.user.id, this.state.product.id);
+    this.props.navCartQty(this.props.user.id);
   };
 
   render() {
@@ -113,8 +69,17 @@ class ProductDetails extends React.Component {
             </h4>
             <p className="mt-4">{desc}</p>
             <div className="d-flex mt-4">
-              <ButtonUI onClick={this.addToCartHandler}> Add To Cart</ButtonUI>
-              <ButtonUI className="ml-4" type="outlined">
+              <ButtonUI onClick={this.addToCartHandler}>Add To Cart</ButtonUI>
+              <ButtonUI
+                onClick={() =>
+                  this.props.addToWishlistHandler(
+                    this.props.user.id,
+                    this.state.product.id
+                  )
+                }
+                className="ml-4"
+                type="outlined"
+              >
                 Add To Wishlist
               </ButtonUI>
             </div>
@@ -132,7 +97,9 @@ const MapStateToProps = state => {
 };
 
 const MapDispatchToProps = {
-  cartQty
+  navCartQty,
+  addToCartHandler,
+  addToWishlistHandler
 };
 
 export default connect(MapStateToProps, MapDispatchToProps)(ProductDetails);

@@ -1,29 +1,57 @@
 import React from "react";
 import "./Cart.css";
-import { connect } from "react-redux";
+import { Modal, ModalHeader, ModalBody, Alert } from "reactstrap";
 import Axios from "axios";
+import { connect } from "react-redux";
 import { API_URL } from "../../../constants/API";
-import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import swal from "sweetalert";
-import { Table, Alert } from "reactstrap";
-import { Link } from "react-router-dom";
 import ButtonUI from "../../components/Button/Button";
 import TextField from "../../components/TextField/TextField";
-import { cartQty } from "../../../redux/actions";
+import { Link } from "react-router-dom";
+import { navCartQty } from "../../../redux/actions";
+
+import swal from "sweetalert";
 
 class Cart extends React.Component {
   state = {
-    delete: false,
-    test: 0,
     productCart: [],
-    showProductDetails: false,
-    transactionDetails: {
+
+    editForm: {
+      id: 0,
+      userId: 0,
+      productId: 0,
+      qty: 0
+    },
+
+    productForm: {
+      id: 0,
+      productName: "",
+      price: 0,
+      category: "",
+      image: "",
+      desc: ""
+    },
+
+    transactions: {
       userId: 0,
       totalPrice: 0,
-      paymentStatus: "pending",
-      products: []
-    }
+      status: "pending",
+      // Check out date ini pas dia click button Confirm Order
+      trxStartDate: "",
+      trxEndDate: "",
+      shippingOpt: 0
+    },
+
+    transactionDetail: {
+      transactionId: 0,
+      productId: 0,
+      price: 0,
+      quantity: 0,
+      totalPrice: 0
+    },
+
+    orderSummary: false,
+    activeProducts: [],
+    modalOpen: false
   };
 
   getProductCart = () => {
@@ -41,39 +69,89 @@ class Cart extends React.Component {
       .catch(err => console.log(err));
   };
 
-  componentDidMount() {
-    this.getProductCart();
-  }
-
   renderProductCart = () => {
-    return this.state.productCart.map((value, index) => {
-      const { id, qty, product } = value;
+    return this.state.productCart.map((val, idx) => {
+      const { id, product, qty, productId } = val;
       return (
         <>
-          <tr>
+          <tr
+            onClick={() => {
+              if (this.state.activeProducts.includes(idx)) {
+                this.setState({
+                  activeProducts: [
+                    ...this.state.activeProducts.filter(item => item !== idx)
+                  ]
+                });
+              } else {
+                this.setState({
+                  activeProducts: [...this.state.activeProducts, idx]
+                });
+              }
+            }}
+          >
+            <td> {productId} </td>
             <td> {product.productName} </td>
-            <td>
-              <img style={{ height: "100px" }} src={product.image} alt="" />
-            </td>
-            <td>
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR"
-              }).format(product.price)}
-            </td>
-            <td> {qty} </td>
             <td>
               {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR"
               }).format(product.price * qty)}
             </td>
-            <td>
-              <FontAwesomeIcon
-                icon={faTrashAlt}
-                style={{ fontSize: 20 }}
-                onClick={() => this.deleteProductCart(id, index)}
-              />
+          </tr>
+          <tr
+            className={`collapse-item ${
+              this.state.activeProducts.includes(idx) ? "active" : null
+            }`}
+          >
+            <td className="" colSpan={3}>
+              <div className="d-flex m-5 justify-content-around align-items-center">
+                <div className="d-flex">
+                  <img src={product.image} alt="" />
+                  <div className="d-flex flex-column ml-4 justify-content-center">
+                    <h5>{product.productName}</h5>
+                    <h6 className="mt-2">
+                      Category:
+                      <span style={{ fontWeight: "normal" }}>
+                        {product.category}
+                      </span>
+                    </h6>
+                    <h6 className="mt-2">
+                      Quantity:
+                      <span style={{ fontWeight: "normal" }}>{qty}</span>
+                    </h6>
+                    <h6>
+                      Price:
+                      <span style={{ fontWeight: "normal" }}>
+                        {new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR"
+                        }).format(product.price)}
+                      </span>
+                    </h6>
+                    <h6>
+                      Description:
+                      <span style={{ fontWeight: "normal" }}>
+                        {product.desc}
+                      </span>
+                    </h6>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-center">
+                  <ButtonUI
+                    onClick={_ => this.editBtnHandler(idx)}
+                    type="contained"
+                  >
+                    Edit
+                  </ButtonUI>
+                  <ButtonUI
+                    className="mt-3"
+                    type="textual"
+                    onClick={() => this.deleteProductCart(id)}
+                  >
+                    Delete
+                  </ButtonUI>
+                </div>
+              </div>
             </td>
           </tr>
         </>
@@ -81,175 +159,287 @@ class Cart extends React.Component {
     });
   };
 
-  deleteProductCart = (productCartId, index) => {
-    Axios.delete(`${API_URL}/carts/${productCartId}`)
-      .then(res => {
-        console.log(res);
-        swal(
-          "Success",
-          "The product has been deleted from your cart",
-          "success"
-        );
-
-        // Tapi ini kita nge set state
-        this.getProductCart();
-        // Ini buat ubah di navbar
-        this.props.cartQty(this.props.user.id);
-
-        // Supaya dia ngerender ulang kita juga ubah statenya
-        // let tempProductCart = this.state.productCart;
-        // console.log(tempProductCart);
-        // tempProductCart.splice(index, 1);
-        // this.setState({ productCart: tempProductCart });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  showTransactionDetails = () => {
-    // Untuk nampung sementara semua product di 1 user ID
-    let tempProduct = [];
-    let totalPrice = 0;
-
-    this.state.productCart.map(value => {
-      tempProduct.push({ ...value.product, qty: value.qty });
-      totalPrice += value.product.price * value.qty;
-    });
-
+  inputHandler = (e, field, form) => {
+    let { value } = e.target;
     this.setState({
-      showProductDetails: true,
-      transactionDetails: {
-        ...this.state.transactionDetails,
-        userId: this.props.user.id,
-        totalPrice,
-        // paymentStatus
-        products: tempProduct
+      [form]: {
+        ...this.state[form],
+        [field]: value
       }
     });
   };
 
-  cancelPayment = () => {
+  editBtnHandler = idx => {
     this.setState({
-      showProductDetails: false
+      editForm: {
+        ...this.state.productCart[idx]
+      },
+      productForm: { ...this.state.productCart[idx].product },
+      modalOpen: true
     });
   };
 
-  renderTransactionDetails = () => {
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center">
-        <div>
-          <h3 className="m-5"> Order Summary </h3>
-          <p>
-            Full Name <TextField value={this.props.user.fullName} />
-            <br />
-            Address
-            <TextField
-              value={
-                this.state.transactionDetails.userId + " ini isinya user ID"
-              }
-            />
-            <br />
-            Total Price
-            <TextField
-              className="mb-3"
-              value={new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR"
-              }).format(this.state.transactionDetails.totalPrice)}
-            />
-            <h6> Product List </h6>
-            <Table>
-              <thead>
-                <tr>
-                  <td> Product ID </td>
-                  <td> Product Name </td>
-                  <td> Product Category </td>
-                  <td> Product Price </td>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.transactionDetails.products.map(value => {
-                  return (
-                    <tr>
-                      <td>{value.id}</td>
-                      <td>{value.productName}</td>
-                      <td>{value.category}</td>
-                      <td>
-                        {new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR"
-                        }).format(value.price)}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </p>
-          <div className=" mt-4 d-flex justify-content-end">
-            <ButtonUI
-              onClick={this.cancelPayment}
-              type="outlined"
-              className="mr-2"
-            >
-              Cancel
-            </ButtonUI>
-            <ButtonUI onClick={this.confirmPayment}> Confirm </ButtonUI>
-          </div>
-        </div>
-      </div>
-    );
+  editProductCart = () => {
+    Axios.patch(`${API_URL}/carts/${this.state.editForm.id}`, {
+      qty: parseInt(this.state.editForm.qty)
+    })
+      .then(res => {
+        swal("Success!", "Your item has been edited", "success");
+        this.setState({
+          modalOpen: false
+          // openOrderSummary: false
+        });
+        this.getProductCart();
+        this.props.navCartQty(this.props.user.id);
+      })
+      .catch(err => {
+        swal("Error!", "Your item could not be edited", "error");
+        console.log(err);
+      });
   };
 
-  confirmPayment = () => {
-    Axios.post(`${API_URL}/transactions`, this.state.transactionDetails)
+  deleteProductCart = cartId => {
+    Axios.delete(`${API_URL}/carts/${cartId}`)
       .then(res => {
-        swal("Thank you", "For shopping with us", "success");
+        swal("Success", "The product has been deleted", "success");
+        this.getProductCart();
+        this.props.navCartQty(this.props.user.id);
       })
       .catch(err => {
         console.log(err);
       });
+  };
 
-    // Untuk kosongin cart
+  toggleModal = () => {
+    this.setState({ modalOpen: !this.state.modalOpen });
+  };
+
+  componentDidMount() {
+    this.getProductCart();
+  }
+
+  openOrderSummary = () => {
+    // Supaya start date atau tanggal belanja kebikinnya pas user check out
+    var date = new Date();
+    var trxStartDate =
+      // Jangan lupa month di + 1 karena dia start dari 0
+      date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+    // Ini fungsi untuk hitung total price semuanya
+    let tempTotalPrice = 0;
     this.state.productCart.map(value => {
-      return this.deleteProductCart(value.id);
+      return (tempTotalPrice += value.qty * value.product.price);
+    });
+    // Ketika tombol open order summary, dia langsung nge set state transactionsnya
+    this.setState({
+      transactions: {
+        ...this.state.transactions,
+        userId: this.props.user.id,
+        totalPrice: tempTotalPrice,
+        trxStartDate
+      },
+      orderSummary: !this.state.orderSummary
     });
   };
 
+  checkOut = () => {
+    // Untuk ngepost ke table transactions
+    Axios.post(`${API_URL}/transactions`, this.state.transactions)
+      .then(res => {
+        console.log(res.data);
+        swal("Thank You", "We will proceed your order immediately", "success");
+        // Trs disini kita ngeset state satu per satu barang yang ada di cart
+        this.state.productCart.map(value => {
+          this.setState({
+            transactionDetail: {
+              transactionId: res.data.id,
+              productId: value.productId,
+              price: value.product.price,
+              quantity: value.qty,
+              totalPrice: value.product.price * value.qty
+            }
+          });
+          // Trs kita post satu persatu
+          Axios.post(
+            `${API_URL}/transactionDetails`,
+            this.state.transactionDetail
+          )
+            .then(res => {
+              console.log(res);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          // Ini buat ngosongin cart
+          this.deleteProductCart(value.id);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        swal(
+          "Oh No !",
+          "There's something wrong with your order, try again !",
+          "error"
+        );
+      });
+  };
+
   render() {
+    let totalPriceFinal =
+      parseInt(this.state.transactions.shippingOpt) +
+      parseInt(this.state.transactions.totalPrice);
+
     if (this.state.productCart.length == 0) {
       return (
         <Alert className="m-5">
           Your cart is empty, go <Link to="/">shopping</Link> !
         </Alert>
       );
+    } else if (this.state.orderSummary) {
     }
     return (
-      <div className="m-5 text-center">
-        <h4 className="m-5"> Your Cart </h4>
-        <div>
-          <Table>
+      <div className="container py-4">
+        <div className="dashboard">
+          <caption className="p-3">
+            <h2>Your Cart</h2>
+          </caption>
+          <table className="dashboard-table">
             <thead>
               <tr>
-                <td colSpan={2}> Product </td>
-                <td> Price </td>
-                <td> Quantity </td>
-                <td> Total </td>
-                <td> </td>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Sub Total</th>
               </tr>
             </thead>
             <tbody>{this.renderProductCart()}</tbody>
-          </Table>
-          <div className="d-flex justify-content-end">
-            <ButtonUI type="contained" onClick={this.showTransactionDetails}>
+          </table>
+          <div className="ml-4 mt-3">
+            <ButtonUI onClick={this.openOrderSummary} type="contained">
               Check Out
             </ButtonUI>
           </div>
-          {this.state.showProductDetails
-            ? this.renderTransactionDetails()
-            : null}
         </div>
+        {this.state.orderSummary ? (
+          <div className="dashboard-form-container p-4">
+            <caption className="p-3">
+              <h2>Order Summary</h2>
+            </caption>
+            <div className="row">
+              <div className="col-4">
+                <select
+                  value={this.state.transactions.shippingOpt}
+                  className="custom-text-input h-100 pl-3"
+                  onChange={e =>
+                    this.inputHandler(e, "shippingOpt", "transactions")
+                  }
+                >
+                  <option value="0" selected disabled>
+                    All
+                  </option>
+                  <option value="100000">Instant</option>
+                  <option value="50000">Same Day</option>
+                  <option value="20000">Express</option>
+                  <option value="0">Economy</option>
+                </select>
+              </div>
+              <div className="col-8">
+                <TextField
+                  value={new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR"
+                  }).format(totalPriceFinal)}
+                  placeholder="Total Price"
+                  // onChange={e =>
+                  //   this.inputHandler(e, "totalPrice", "transactions")
+                  // }
+                />
+              </div>
+            </div>
+            <div className=" mt-3">
+              <ButtonUI onClick={this.checkOut} type="contained">
+                Confirm Order
+              </ButtonUI>
+            </div>
+          </div>
+        ) : null}
+        <Modal
+          toggle={this.toggleModal}
+          isOpen={this.state.modalOpen}
+          className="edit-modal"
+        >
+          <ModalHeader toggle={this.toggleModal}>
+            <caption>
+              <h3>Edit Product</h3>
+            </caption>
+          </ModalHeader>
+          <ModalBody>
+            <div className="row">
+              <div className="col-8">
+                <TextField
+                  value={this.state.productForm.productName}
+                  placeholder="Product Name"
+                />
+              </div>
+              <div className="col-4">
+                <TextField
+                  value={new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR"
+                  }).format(this.state.productForm.price)}
+                  placeholder="Price"
+                />
+              </div>
+              <div className="col-12 mt-3">
+                <textarea
+                  value={this.state.productForm.desc}
+                  style={{ resize: "none" }}
+                  placeholder="Description"
+                  className="custom-text-input"
+                ></textarea>
+              </div>
+              <div className="col-6 mt-3">
+                <TextField
+                  value={this.state.editForm.qty}
+                  type="number"
+                  placeholder="Quantity"
+                  onChange={e => this.inputHandler(e, "qty", "editForm")}
+                />
+              </div>
+              <div className="col-6 mt-3">
+                <select
+                  value={this.state.productForm.category}
+                  className="custom-text-input h-100 pl-3"
+                  disabled
+                >
+                  <option value="Phone">Phone</option>
+                  <option value="Tab">Tab</option>
+                  <option value="Laptop">Laptop</option>
+                  <option value="Desktop">Desktop</option>
+                </select>
+              </div>
+              <div className="col-12 text-center my-3">
+                <img src={this.state.productForm.image} alt="" />
+              </div>
+              <div className="col-5 mt-3 offset-1">
+                <ButtonUI
+                  className="w-100"
+                  onClick={this.toggleModal}
+                  type="outlined"
+                >
+                  Cancel
+                </ButtonUI>
+              </div>
+              <div className="col-5 mt-3">
+                <ButtonUI
+                  className="w-100"
+                  onClick={this.editProductCart}
+                  type="contained"
+                >
+                  Save
+                </ButtonUI>
+              </div>
+            </div>
+          </ModalBody>
+        </Modal>
       </div>
     );
   }
@@ -262,7 +452,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  cartQty
+  navCartQty
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

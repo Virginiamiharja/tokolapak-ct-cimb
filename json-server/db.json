@@ -37,14 +37,14 @@
       "fullName": "Queen Nugget",
       "email": "nugget@mail.com",
       "password": "password",
-      "role": "user",
+      "role": "admin",
       "id": 5
     }
   ],
   "products": [
     {
       "productName": "iPhone 7 Plus",
-      "price": 5000000,
+      "price": "6000000",
       "category": "Phone",
       "image": "https://ibox.co.id/media/wysiwyg/PromoOnline/web-banner---iphone-7-plus-rev.png",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
@@ -68,7 +68,7 @@
     },
     {
       "productName": "iMac ",
-      "price": "34000000",
+      "price": 34000000,
       "category": "Desktop",
       "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/m/imac-27-cto-hero-201903_1_1.jpeg",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
@@ -76,7 +76,7 @@
     },
     {
       "productName": "iPhone 11 Pro Max",
-      "price": "20000000",
+      "price": 20000000,
       "category": "Phone",
       "image": "https://ibox.co.id/media/catalog/product/cache/3/image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-11-pro-max-midnight-green_3.png",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hicimpedit facilis nam vitae, accusamus doloribus aliasrepellendus veniam voluptates ad doloremque sequi est, atfugit pariatur quisquam ratione, earum sapiente",
@@ -84,7 +84,7 @@
     },
     {
       "productName": "Samsung Galaxy Flip Z",
-      "price": "23000000",
+      "price": 23000000,
       "category": "Phone",
       "image": "https://images.samsung.com/id/smartphones/galaxy-z-flip/images/galaxy-z-flip-share-image.jpg",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut faucibus urna ac lacus commodo, sit amet ullamcorper libero tempor. Curabitur lacinia lectus ut metus malesuada, sed posuere libero posuere. Donec sollicitudin sit amet tortor sit amet consectetur.",
@@ -92,7 +92,7 @@
     },
     {
       "productName": "Asus ROG G531GD",
-      "price": "25000000",
+      "price": 25000000,
       "category": "Laptop",
       "image": "https://www.pemmz.com/media/catalog/product/cache/5/thumbnail/1000x1000/040ec09b1e35df139433887a97daa66f/s/t/st3_2_2.jpg",
       "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut faucibus urna ac lacus commodo, sit amet ullamcorper libero tempor. Curabitur lacinia lectus ut metus malesuada, sed posuere libero posuere. Donec sollicitudin sit amet tortor sit amet consectetur.",
@@ -101,35 +101,86 @@
   ],
   "carts": [
     {
-      "userId": 2,
-      "productId": 3,
-      "qty": 2,
-      "id": 6
-    },
-    {
-      "userId": 1,
-      "productId": 1,
-      "qty": 3,
-      "id": 7
+      "userId": 4,
+      "productId": 2,
+      "qty": 5,
+      "id": 2
     },
     {
       "userId": 1,
       "productId": 2,
       "qty": 2,
-      "id": 8
+      "id": 6
     },
     {
-      "userId": 3,
-      "productId": 1,
+      "userId": 1,
+      "productId": 5,
       "qty": 1,
-      "id": 10
-    },
-    {
-      "userId": 3,
-      "productId": 6,
-      "qty": 1,
-      "id": 11
+      "id": 7
     }
   ],
-  "transactions": []
+  "transactions": [
+    {
+      "userId": 3,
+      "totalPrice": 68000000,
+      "status": "approved",
+      "trxStartDate": "5/5/2020",
+      "trxEndDate": "5/5/2020",
+      "shippingOpt": "50000",
+      "id": 1
+    },
+    {
+      "userId": 2,
+      "totalPrice": 102000000,
+      "status": "pending",
+      "trxStartDate": "5/5/2020",
+      "trxEndDate": "",
+      "shippingOpt": "100000",
+      "id": 2
+    },
+    {
+      "userId": 3,
+      "totalPrice": 30000000,
+      "status": "approved",
+      "trxStartDate": "5/5/2020",
+      "trxEndDate": "5/5/2020",
+      "shippingOpt": "100000",
+      "id": 3
+    }
+  ],
+  "transactiondetails": [
+    {
+      "transactionId": 1,
+      "productId": 4,
+      "price": 34000000,
+      "quantity": 2,
+      "totalPrice": 68000000,
+      "id": 1
+    },
+    {
+      "transactionId": 2,
+      "productId": 2,
+      "price": 15000000,
+      "quantity": 6,
+      "totalPrice": 90000000,
+      "id": 2
+    },
+    {
+      "transactionId": 2,
+      "productId": 1,
+      "price": "6000000",
+      "quantity": 2,
+      "totalPrice": 12000000,
+      "id": 3
+    },
+    {
+      "transactionId": 3,
+      "productId": 2,
+      "price": 15000000,
+      "quantity": 2,
+      "totalPrice": 30000000,
+      "id": 4
+    }
+  ],
+  "wishlists": []
 }

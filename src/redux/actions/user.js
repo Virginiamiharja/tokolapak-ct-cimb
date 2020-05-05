@@ -1,6 +1,5 @@
 import Axios from "axios";
 import { API_URL } from "../../constants/API";
-import swal from "sweetalert";
 import Cookie from "universal-cookie";
 import userTypes from "../types/user";
 
@@ -100,37 +99,6 @@ export const logoutHandler = () => {
   cookieObject.remove("authData", { path: "/" });
   return {
     type: ON_LOGOUT_SUCCESS
-  };
-};
-
-export const searchProduct = searchInput => {
-  return {
-    type: "SEARCH_PRODUCT",
-    payload: searchInput
-  };
-};
-
-export const cartQty = userId => {
-  return dispatch => {
-    Axios.get(`${API_URL}/carts`, {
-      params: {
-        userId
-      }
-    })
-      .then(res => {
-        console.log(res.data);
-        let cartQty = 0;
-        res.data.map(value => {
-          return (cartQty += value.qty);
-        });
-        dispatch({
-          type: "SET_CART_QTY",
-          payload: cartQty
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 };
 

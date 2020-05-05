@@ -4,6 +4,8 @@ import ButtonUI from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { addToWishlistHandler } from "../../../redux/actions";
 
 interface ProductCardData {
   id?: number;
@@ -54,8 +56,10 @@ class ProductCard extends React.Component<ProductCardProps> {
           <ButtonUI
             type="outlined"
             style={{ fontSize: "12px", padding: "4px 8px" }}
+            // onClick={() =>
+            //   this.props.addToWishlistHandler(this.props.user.id, id)
+            // }
           >
-            {" "}
             <FontAwesomeIcon icon={faHeart} /> Add to wishlist
           </ButtonUI>
         </div>
@@ -64,4 +68,15 @@ class ProductCard extends React.Component<ProductCardProps> {
   }
 }
 
-export default ProductCard;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    search: state.search
+  };
+};
+
+const mapDispatchToProps = {
+  addToWishlistHandler
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard);

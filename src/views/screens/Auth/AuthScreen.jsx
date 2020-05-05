@@ -83,7 +83,11 @@ class AuthScreen extends React.Component {
 
   componentDidUpdate() {
     if (this.props.user.id) {
-      cookieObject.set("authData", JSON.stringify(this.props.user));
+      // Path "/" itu biar bisa diakses di semua component
+      // Dan sekali lagi si json stringify itu berfungsi untuk merubah jadi string
+      cookieObject.set("authData", JSON.stringify(this.props.user), {
+        path: "/"
+      });
     }
   }
 
