@@ -14,14 +14,14 @@ class History extends React.Component {
     transactionList: [],
     productList: [],
 
-    editForm: {
-      id: 0,
-      userId: 0,
-      totalPrice: 0,
-      status: "",
-      trxStartDate: "",
-      trxEndDate: ""
-    },
+    // editForm: {
+    //   id: 0,
+    //   userId: 0,
+    //   totalPrice: 0,
+    //   status: "",
+    //   trxStartDate: "",
+    //   trxEndDate: ""
+    // },
 
     activeTransactions: [],
     modalOpen: false
@@ -58,7 +58,15 @@ class History extends React.Component {
 
   renderTransactionList = () => {
     return this.state.transactionList.map((val, idx) => {
-      const { id, totalPrice, status, trxStartDate, trxEndDate, user } = val;
+      const {
+        id,
+        totalPrice,
+        status,
+        trxStartDate,
+        trxEndDate,
+        user,
+        shippingOpt
+      } = val;
       if (status == "approved")
         return (
           <>
@@ -85,9 +93,23 @@ class History extends React.Component {
                 {new Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR"
-                }).format(totalPrice)}
+                }).format(parseInt(totalPrice) + parseInt(shippingOpt))}
               </td>
               <td> {status} </td>
+              <td>
+                <select
+                  value={shippingOpt}
+                  className="custom-text-input h-100 pl-3"
+                >
+                  <option value="0" selected disabled>
+                    All
+                  </option>
+                  <option value="100000">Instant - Rp. 100.000</option>
+                  <option value="50000">Same Day - Rp. 50.000</option>
+                  <option value="20000">Express - Rp. 20.000</option>
+                  <option value="0">Economy - Free</option>
+                </select>{" "}
+              </td>
               <td> {trxStartDate} </td>
               <td> {trxEndDate} </td>
               <td>
@@ -218,8 +240,9 @@ class History extends React.Component {
               <tr>
                 <th>ID</th>
                 <th colSpan={2}>Full Name</th>
-                <th colSpan={2}>Total Price</th>
+                <th colSpan={2}>Total Price + Shipping Fee</th>
                 <th>Status</th>
+                <th>Shipping Fee</th>
                 <th>Check Out Date</th>
                 <th>Approved Date</th>
                 <th colSpan={2}></th>
